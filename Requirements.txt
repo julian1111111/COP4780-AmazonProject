@@ -1,0 +1,9 @@
+Part 1 Requirements: 
+1. Menu that allows a person to take the following actions on either the inventory or their shopping cart:
+	1. Create an item (or add an item from the inventory to the shopping cart)
+	2. Read all items in the inventory or the shopping cart
+	3. Update the product details in the inventory (or the number of items in the shopping cart)
+	4. Delete the product from the inventory or return all of a product from the shopping cart to the inventory
+2. When a user adds from the inventory to the cart, the number of a product in the inventory and shopping cart must reflect the correct number 
+3. A user may not purchase more of a product than is available in the inventory 
+4. When a user wants to quit the program, they should check out, which should present a formatted, itemized receipt including the total of their purchase with 7% sales tax included
