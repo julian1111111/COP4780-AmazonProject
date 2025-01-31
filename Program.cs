@@ -41,16 +41,7 @@ namespace MyApp
                 choice = input[0];
 
                 inventoryMode = inventoryMode ? inventoryOperations(choice) : cartOperations(choice);
-
-                if (oldMode != inventoryMode)
-                {
-                    Console.WriteLine("CHANGED MODES");
-                    modeChange = true;
-                }
-                else
-                {
-                    modeChange = false;
-                }
+                modeChange = oldMode != inventoryMode ? true : false;
 
             } while (char.ToUpper(choice) != 'Q');
         }
