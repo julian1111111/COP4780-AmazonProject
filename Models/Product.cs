@@ -10,10 +10,13 @@ namespace AmazonProject.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int Quantity { get; set; }
 
         public Product()
         {
+            Id = -1;
             Name = string.Empty;
+            Quantity = 1;
         }
     }
 }
