@@ -1,0 +1,42 @@
+two modes: inventory and cart
+both have create, read all
+update is different: changes item info in inventory mode, changes quantity of an item in cart mode
+delete is different: delete item from inventory, move all of an item from cart to inventory
+
+two different menus
+two different lists of products
+
+same command options in each menu
+
+could have a menu function that takes bool inventoryMode as parameter
+also separate inventory and cart operations (switch statements) functions
+
+menu is displayed for appropriate mode, input read and sent to appropriate switch
+
+program so far:
+- reads for i or s
+- prints correct menu
+- takes input again
+- depending on bool inventoryMode, sends new input to appropriate function
+
+want:
+- only display mode menu once after switching modes, while in same mode only display mode name
+
+could:
+- add bool parameter to printMenu
+- check if inventory mode changed from start of loop to end of loop
+
+- inventory mode is either true or false at beginning of loop
+- inventory mode is either unchanged or opposite value at end of loop
+
+updating number of an item in cart:
+- find the item quantity in inventory
+- find the item quantity in cart
+- (adding) if desired quantity is larger than current cart quantity: difference = desired - current
+- (subtracting) if desired quantity is less than current cart quantity: difference = current - desired
+
+- new cart quantity (adding): current + difference
+- new inventory quantity (adding): current - difference
+
+- new cart quantity (subtracting): current - difference
+- new inventory quantity(subtracting): current + difference
