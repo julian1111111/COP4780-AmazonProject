@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "Library.eCommerce/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Library.eCommerce.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Library.eCommerce.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Library.eCommerce/1.0.0": {
+      "type": "project",
+      "path": "../Library.eCommerce/Library.eCommerce.csproj",
+      "msbuildProject": "../Library.eCommerce/Library.eCommerce.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "Library.eCommerce >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\gson1\\.nuget\\packages\\": {},
@@ -39,7 +58,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\gson1\\Desktop\\CSharp\\Project\\Library.eCommerce\\Library.eCommerce.csproj": {
+              "projectPath": "C:\\Users\\gson1\\Desktop\\CSharp\\Project\\Library.eCommerce\\Library.eCommerce.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

@@ -12,3 +12,11 @@ C:\Users\gson1\Desktop\CSharp\AmazonProject\obj\Debug\net8.0\refint\AmazonProjec
 C:\Users\gson1\Desktop\CSharp\AmazonProject\obj\Debug\net8.0\AmazonProject.pdb
 C:\Users\gson1\Desktop\CSharp\AmazonProject\obj\Debug\net8.0\AmazonProject.genruntimeconfig.cache
 C:\Users\gson1\Desktop\CSharp\AmazonProject\obj\Debug\net8.0\ref\AmazonProject.dll
+C:\Users\gson1\Desktop\CSharp\Project\AmazonProject\obj\Debug\net8.0\AmazonProject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gson1\Desktop\CSharp\Project\AmazonProject\obj\Debug\net8.0\AmazonProject.AssemblyInfoInputs.cache
+C:\Users\gson1\Desktop\CSharp\Project\AmazonProject\obj\Debug\net8.0\AmazonProject.AssemblyInfo.cs
+C:\Users\gson1\Desktop\CSharp\Project\AmazonProject\obj\Debug\net8.0\AmazonProject.csproj.CoreCompileInputs.cache
+C:\Users\gson1\Desktop\CSharp\Project\AmazonProject\obj\Debug\net8.0\AmazonProject.sourcelink.json
+C:\Users\gson1\Desktop\CSharp\Project\AmazonProject\obj\Debug\net8.0\AmazonProject.dll
+C:\Users\gson1\Desktop\CSharp\Project\AmazonProject\obj\Debug\net8.0\refint\AmazonProject.dll
+C:\Users\gson1\Desktop\CSharp\Project\AmazonProject\obj\Debug\net8.0\AmazonProject.pdb
