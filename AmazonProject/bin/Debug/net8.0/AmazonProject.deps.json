@@ -7,14 +7,30 @@
   "targets": {
     ".NETCoreApp,Version=v8.0": {
       "AmazonProject/1.0.0": {
+        "dependencies": {
+          "Library.eCommerce": "1.0.0"
+        },
         "runtime": {
           "AmazonProject.dll": {}
+        }
+      },
+      "Library.eCommerce/1.0.0": {
+        "runtime": {
+          "Library.eCommerce.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
   },
   "libraries": {
     "AmazonProject/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Library.eCommerce/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

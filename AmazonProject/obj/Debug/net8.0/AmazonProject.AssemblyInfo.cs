@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AmazonProject")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ab64d9562570c77bc7ac675b1f26c168b0322a3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3f5199030a5c2606a53ad563534959e5632fc6f6")]
 [assembly: System.Reflection.AssemblyProductAttribute("AmazonProject")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AmazonProject")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

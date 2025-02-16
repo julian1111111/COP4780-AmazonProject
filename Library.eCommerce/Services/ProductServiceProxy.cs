@@ -9,67 +9,85 @@ namespace Library.eCommerce.Services
 {
     public class ProductServiceProxy
     {
-        private ProductServiceProxy()
-        {
-            Products = new List<Product?>();
-        }
+        private static ProductServiceProxy? _current;
+        public static ProductServiceProxy Current => _current ??= new ProductServiceProxy();
 
-        private int LastKey
+        public List<Product?> InventoryProducts { get; } = new List<Product?>();
+        public List<Product?> CartProducts { get; } = new List<Product?>();
+
+        public int LastKey { get; private set; }
+
+        public Product AddOrUpdateInventory(Product product)
         {
-            get
+            var existingProduct = InventoryProducts.FirstOrDefault(p => p?.Id == product.Id);
+            if (existingProduct == null)
             {
-                if (!Products.Any())
-                {
-                    return 0;
-                }
-
-                return Products.Select(propa => propa?.Id ?? 0).Max();
+                product.Id = ++LastKey;
+                InventoryProducts.Add(product);
             }
-        }
-
-        private static ProductServiceProxy? instance;
-        private static object instanceLock = new object();
-
-        public static ProductServiceProxy Current
-        {
-            get
+            else
             {
-                lock (instanceLock)
-                {
-                    if (instance == null)
-                    {
-                        instance = new ProductServiceProxy();
-                    }
-                }
-
-                return instance;
-            }
-        }
-
-        public List<Product?> Products { get; private set; }
-
-        public Product AddOrUpdate(Product product)
-        {
-            if (product.Id == 0)
-            {
-                product.Id = LastKey + 1;
-                Products.Add(product);
+                existingProduct.Name = product.Name;
+                existingProduct.Quantity = product.Quantity;
             }
 
             return product;
         }
 
-        public Product? Delete(int id)
+        public void AddToCart(int productId, int quantity)
         {
-            if (id == 0)
+            var inventoryProduct = InventoryProducts.FirstOrDefault(p => p?.Id == productId);
+            if (inventoryProduct == null || inventoryProduct.Quantity < quantity)
             {
-                return null;
+                throw new InvalidOperationException("Not enough inventory.");
             }
 
-            Product? product = Products.FirstOrDefault(p => p.Id == id);
-            Products.Remove(product);
+            inventoryProduct.Quantity -= quantity;
 
-            return product;
+            var cartProduct = CartProducts.FirstOrDefault(p => p?.Id == productId);
+            if (cartProduct == null)
+            {
+                CartProducts.Add(new Product { Id = productId, Name = inventoryProduct.Name, Quantity = quantity });
+            }
+            else
+            {
+                cartProduct.Quantity += quantity;
+            }
+        }
+
+        public void RemoveFromCart(int productId, int quantity)
+        {
+            var cartProduct = CartProducts.FirstOrDefault(p => p?.Id == productId);
+            if (cartProduct == null || cartProduct.Quantity < quantity)
+            {
+                throw new InvalidOperationException("Not enough items in the cart.");
+            }
+
+            cartProduct.Quantity -= quantity;
+            if (cartProduct.Quantity == 0)
+            {
+                CartProducts.Remove(cartProduct);
+            }
+
+            var inventoryProduct = InventoryProducts.FirstOrDefault(p => p?.Id == productId);
+            if (inventoryProduct != null)
+            {
+                inventoryProduct.Quantity += quantity;
+            }
+        }
+
+        public void Checkout()
+        {
+            const double salesTax = 0.07;
+            double total = CartProducts.Sum(p => p?.Quantity * 10 ?? 0); // Assuming each product costs 10 units
+            double totalWithTax = total * (1 + salesTax);
+
+            Console.WriteLine("Receipt:");
+            foreach (var product in CartProducts)
+            {
+                Console.WriteLine($"{product?.Name}: {product?.Quantity}");
+            }
+            Console.WriteLine($"Total: {totalWithTax:C}");
         }
     }
 }

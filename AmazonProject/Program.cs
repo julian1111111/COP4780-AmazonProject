@@ -20,14 +20,14 @@ namespace MyApp
             Console.WriteLine("S: Shopping cart management");
             Console.Write(">>> ");
 
-            List<Product?> inventoryProducts = new List<Product?>();
-            List<Product?> cartProducts = new List<Product?>();
+            List<Product?> inventoryProducts = ProductServiceProxy.Current.InventoryProducts;
+            List<Product?> cartProducts = ProductServiceProxy.Current.CartProducts;
 
             string? input = Console.ReadLine();
             char choice = input[0];
 
             inventoryMode = char.ToUpper(choice) == 'I' ? true :
-                            char.ToUpper(choice) == 'S' ? false : 
+                            char.ToUpper(choice) == 'S' ? false :
                             inventoryMode;
 
             if (char.ToUpper(choice) != 'I' && char.ToUpper(choice) != 'S')
@@ -43,7 +43,7 @@ namespace MyApp
                 input = Console.ReadLine();
                 choice = input[0];
 
-                inventoryMode = inventoryMode ? inventoryOperations(choice, ref inventoryProducts, ref lastId) 
+                inventoryMode = inventoryMode ? inventoryOperations(choice, ref inventoryProducts, ref lastId)
                                               : cartOperations(choice, ref inventoryProducts, ref cartProducts);
                 modeChange = oldMode != inventoryMode ? true : false;
 
@@ -86,42 +86,19 @@ namespace MyApp
             switch (char.ToUpper(inventoryOp))
             {
                 case 'C':
-                    Console.Write("Enter the item name >>> ");
-                    string? name = Console.ReadLine() ?? "Unknown";
-                    Console.Write("Enter the item quantity >>> ");
-                    int quantity = Convert.ToInt32(Console.ReadLine());
-                    inventoryProducts.Add(new Product { Name = name, Id = lastId++, Quantity = quantity });
+                    CreateItem(inventoryMode);
                     break;
 
                 case 'R':
-                    Console.WriteLine("Reading all inventory items");
-                    Console.WriteLine("ID\tName\tQuantity");
-                    foreach (var product in inventoryProducts)
-                    {
-                        if (product?.Quantity > 0)
-                        {
-                            Console.WriteLine($"{product?.Id}\t{product?.Name}\t{product?.Quantity}");
-                        }
-                    }
+                    ReadItems(inventoryMode, ref inventoryProducts, ref inventoryProducts);
                     break;
 
                 case 'U':
-                    Console.Write("Enter name of item to be updated >>> ");
-                    name = Console.ReadLine();
-                    foreach (var product in inventoryProducts)
-                    {
-                        if (product?.Name == name)
-                        {
-                            Console.Write("Enter new name >>> ");
-                            product.Name = Console.ReadLine() ?? "Unknown";
-                        }
-                    }
+                    UpdateItem(inventoryMode, ref inventoryProducts, ref inventoryProducts);
                     break;
 
                 case 'D':
-                    Console.Write("Enter name of item to be deleted from inventory >>> ");
-                    name = Console.ReadLine();
-                    inventoryProducts.RemoveAll(product => product?.Name == name);
+                    DeleteItem(inventoryMode, ref inventoryProducts, ref inventoryProducts);
                     break;
 
                 case 'M':
@@ -138,139 +115,19 @@ namespace MyApp
             switch (char.ToUpper(cartOp))
             {
                 case 'C':
-                    Console.Write("Enter item name >>> ");
-                    string? name = Console.ReadLine() ?? "Unknown";
-                    Console.Write("Enter item quantity >>> ");
-                    int quantity = Convert.ToInt32(Console.ReadLine());
-                    if (quantity <= 0)
-                    {
-                        Console.WriteLine("Invalid quantity");
-                        break;
-                    }
-
-                    foreach (var product in inventoryProducts)
-                    {
-                        if (name == product?.Name && quantity <= product?.Quantity)
-                        {
-                            cartProducts.Add(new Product { Name = name, Id = product.Id, Quantity = quantity });
-                            product.Quantity -= quantity;
-                        }
-                        else if (name == product?.Name && quantity > product?.Quantity)
-                        {
-                            Console.WriteLine("Not enough items in inventory");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Item not found in inventory");
-                        }
-                    }
+                    CreateItem(inventoryMode);
                     break;
 
                 case 'R':
-                    Console.WriteLine("Reading all inventory items");
-                    Console.WriteLine("ID\tName\tQuantity");
-                    foreach (var product in cartProducts)
-                    {
-                        if (product?.Quantity > 0)
-                        {
-                            Console.WriteLine($"{product?.Id}\t{product?.Name}\t{product?.Quantity}");
-                        }
-                    }
+                    ReadItems(inventoryMode, ref inventoryProducts, ref cartProducts);
                     break;
 
                 case 'U':
-                    Console.Write("Enter item name >>> ");
-                    name = Console.ReadLine();
-                    Console.Write("Enter new quantity >>> ");
-                    int desiredQuantity = Convert.ToInt32(Console.ReadLine());
-
-                    int inventoryQuantity = 0;
-                    int cartQuantity = 0;
-                    int difference = 0;
-
-                    foreach (var product in inventoryProducts)
-                    {
-                        if (name == product?.Name)
-                        {
-                            inventoryQuantity = product.Quantity;
-                        }
-                    }
-                    foreach (var product in cartProducts)
-                    {
-                        if (name == product?.Name)
-                        {
-                            cartQuantity = product.Quantity;
-                        }
-                    }
-
-                    // If user wants to add more of an item to cart
-                    if (desiredQuantity >= cartQuantity)
-                    {
-                        difference = desiredQuantity - cartQuantity;
-                        // If there are enough items in inventory
-                        if (difference <= inventoryQuantity)
-                        {
-                            foreach (var product in inventoryProducts)
-                            {
-                                if (name == product?.Name)
-                                {
-                                    product.Quantity -= difference;
-                                }
-                            }
-                            foreach (var product in cartProducts)
-                            {
-                                if (name == product?.Name)
-                                {
-                                    product.Quantity = desiredQuantity;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Not enough items in inventory");
-                        }
-                    }
-                    // If user wants to remove some of an item from cart
-                    else
-                    {
-                        difference = cartQuantity - desiredQuantity;
-                        // If there are enough items in cart
-                        if (difference <= cartQuantity)
-                        {
-                            foreach (var product in inventoryProducts) {
-                                if (name == product?.Name)
-                                {
-                                    product.Quantity += difference;
-                                }
-                            }
-                            foreach (var product in cartProducts)
-                            {
-                                if (name == product?.Name)
-                                {
-                                    product.Quantity = desiredQuantity;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Not enough items in cart");
-                        }
-                    }
-
+                    UpdateItem(inventoryMode, ref inventoryProducts, ref cartProducts);
                     break;
 
                 case 'D':
-                    Console.Write("Enter item name to be removed from cart >>> ");
-                    name = Console.ReadLine();
-
-                    foreach (var product in cartProducts)
-                    {
-                        if (name == product?.Name)
-                        {
-                            inventoryProducts.Add(product);
-                        }
-                    }
-                    cartProducts.RemoveAll(p => p.Name == name);
+                    DeleteItem(inventoryMode, ref inventoryProducts, ref cartProducts);
                     break;
 
                 case 'M':
@@ -279,6 +136,102 @@ namespace MyApp
                     break;
             }
             return inventoryMode;
+        }
+
+        static void CreateItem(bool inventoryMode)
+        {
+
+            if (inventoryMode)
+            {
+                Console.Write("Enter the item name >>> ");
+                string? name = Console.ReadLine() ?? "Unknown";
+                Console.Write("Enter the item quantity >>> ");
+                int quantity = Convert.ToInt32(Console.ReadLine());
+                //inventoryProducts.Add(new Product { Name = name, Id = lastId++, Quantity = quantity });
+                ProductServiceProxy.Current.AddOrUpdateInventory(new Product { Name = name, Quantity = quantity });
+            }
+            else
+            {
+                Console.Write("Enter product ID to add to cart >>> ");
+                int id = int.Parse(Console.ReadLine() ?? "0");
+                Console.Write("Enter quantity to add to cart >>> ");
+                int quantity = int.Parse(Console.ReadLine() ?? "0");
+                //cartProducts.Add(new Product { Name = name, Id = lastId++, Quantity = quantity });
+                ProductServiceProxy.Current.AddToCart(id, quantity);
+            }
+        }
+
+        static void ReadItems(bool inventoryMode, ref List<Product?> inventoryProducts, ref List<Product?>cartProducts)
+        {
+            if (inventoryMode)
+            {
+                Console.WriteLine("\tInventory\nID\tName\tQuantity\n--------------------------");
+                inventoryProducts.ForEach(Console.WriteLine);
+            }
+
+            else
+            {
+                Console.WriteLine("\tCart\nID\tName\tQuantity\n--------------------------");
+                cartProducts.ForEach(Console.WriteLine);
+            }
+        }
+
+        static void UpdateItem(bool inventoryMode, ref List<Product?> inventoryProducts, ref List<Product?> cartProducts)
+        {
+            if (inventoryMode)
+            {
+                Console.Write("Enter product ID to update >>> ");
+                int id = int.Parse(Console.ReadLine() ?? "0");
+                Console.Write("Enter new product name >>> ");
+                string? name = Console.ReadLine();
+                Console.Write("Enter new product quantity >>> ");
+                int quantity = int.Parse(Console.ReadLine() ?? "0");
+
+                ProductServiceProxy.Current.AddOrUpdateInventory(new Product { Id = id, Name = name, Quantity = quantity });
+            }
+
+            else
+            {
+                Console.Write("Enter product ID to update >>> ");
+                int id = int.Parse(Console.ReadLine() ?? "0");
+                Console.Write("Enter new product quantity >>> ");
+                int quantity = int.Parse(Console.ReadLine() ?? "0");
+
+                Product? targetCartProduct = cartProducts.FirstOrDefault(p => p?.Id == id);
+                Product? targetInventoryProduct = inventoryProducts.FirstOrDefault(p => p?.Id == id);
+
+                // want less of item in cart 
+                if (quantity <= targetCartProduct?.Quantity)
+                {
+                    ProductServiceProxy.Current.RemoveFromCart(id, quantity);
+                }
+                // want more of item in cart 
+                else
+                {
+                    ProductServiceProxy.Current.AddToCart(id, quantity);
+                }
+            }
+        }
+
+        static void DeleteItem(bool inventoryMode, ref List<Product?> inventoryProducts, ref List<Product?> cartProducts)
+        {
+            if (inventoryMode)
+            {
+                Console.Write("Enter product ID to delete from inventory >>> ");
+                int id = int.Parse(Console.ReadLine() ?? "0");
+                var product = ProductServiceProxy.Current.InventoryProducts.FirstOrDefault(p => p?.Id == id);
+                if (product != null)
+                {
+                    ProductServiceProxy.Current.InventoryProducts.Remove(product);
+                }
+            }
+            else
+            {
+                Console.Write("Enter product ID to remove from cart >>> ");
+                int id = int.Parse(Console.ReadLine() ?? "0");
+                var product = ProductServiceProxy.Current.CartProducts.FirstOrDefault(p => p?.Id == id);
+                ProductServiceProxy.Current.RemoveFromCart(id, product.Quantity);
+            }
         }
     }
 }
