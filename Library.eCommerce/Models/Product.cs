@@ -15,7 +15,7 @@ namespace AmazonProject.Models
         {
             get
             {
-                return $"{Id}\t{Name}\t{Quantity}";
+                return $"{Id}\t{Name}\t\t{Quantity}";
             }
         }
 

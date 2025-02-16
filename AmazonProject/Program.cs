@@ -86,7 +86,7 @@ namespace MyApp
             switch (char.ToUpper(inventoryOp))
             {
                 case 'C':
-                    CreateItem(inventoryMode);
+                    CreateItem(inventoryMode, ref inventoryProducts, ref inventoryProducts);
                     break;
 
                 case 'R':
@@ -115,7 +115,7 @@ namespace MyApp
             switch (char.ToUpper(cartOp))
             {
                 case 'C':
-                    CreateItem(inventoryMode);
+                    CreateItem(inventoryMode, ref inventoryProducts, ref cartProducts);
                     break;
 
                 case 'R':
@@ -138,25 +138,19 @@ namespace MyApp
             return inventoryMode;
         }
 
-        static void CreateItem(bool inventoryMode)
+        static void CreateItem(bool inventoryMode, ref List<Product?> inventoryProducts, ref List<Product?> cartProducts)
         {
-
             if (inventoryMode)
             {
-                Console.Write("Enter the item name >>> ");
-                string? name = Console.ReadLine() ?? "Unknown";
-                Console.Write("Enter the item quantity >>> ");
-                int quantity = Convert.ToInt32(Console.ReadLine());
-                //inventoryProducts.Add(new Product { Name = name, Id = lastId++, Quantity = quantity });
+                string name = GetValidString("Enter product name >>> ");
+                int quantity = GetValidInteger("Enter product quantity >>> ");
                 ProductServiceProxy.Current.AddOrUpdateInventory(new Product { Name = name, Quantity = quantity });
             }
             else
             {
-                Console.Write("Enter product ID to add to cart >>> ");
-                int id = int.Parse(Console.ReadLine() ?? "0");
-                Console.Write("Enter quantity to add to cart >>> ");
-                int quantity = int.Parse(Console.ReadLine() ?? "0");
-                //cartProducts.Add(new Product { Name = name, Id = lastId++, Quantity = quantity });
+                ReadItems(inventoryMode : true, ref inventoryProducts, ref cartProducts);
+                int id = GetValidInteger("Enter product ID to add to cart >>> ");
+                int quantity = GetValidInteger("Enter product quantity >>> ");
                 ProductServiceProxy.Current.AddToCart(id, quantity);
             }
         }
@@ -165,13 +159,13 @@ namespace MyApp
         {
             if (inventoryMode)
             {
-                Console.WriteLine("\tInventory\nID\tName\tQuantity\n--------------------------");
+                Console.WriteLine("\tInventory\nID\tName\t\tQuantity\n--------------------------------");
                 inventoryProducts.ForEach(Console.WriteLine);
             }
 
             else
             {
-                Console.WriteLine("\tCart\nID\tName\tQuantity\n--------------------------");
+                Console.WriteLine("\tCart\nID\tName\t\tQuantity\n--------------------------------");
                 cartProducts.ForEach(Console.WriteLine);
             }
         }
@@ -180,22 +174,21 @@ namespace MyApp
         {
             if (inventoryMode)
             {
-                Console.Write("Enter product ID to update >>> ");
-                int id = int.Parse(Console.ReadLine() ?? "0");
-                Console.Write("Enter new product name >>> ");
-                string? name = Console.ReadLine();
-                Console.Write("Enter new product quantity >>> ");
-                int quantity = int.Parse(Console.ReadLine() ?? "0");
+                ReadItems(inventoryMode : true, ref inventoryProducts, ref cartProducts);
+                int id = GetValidInteger("Enter product ID to update >>> ");
+                string name = GetValidString("Enter new product name >>> ");
+                int quantity = GetValidInteger("Enter new product quantity >>> ");
 
                 ProductServiceProxy.Current.AddOrUpdateInventory(new Product { Id = id, Name = name, Quantity = quantity });
             }
 
             else
             {
-                Console.Write("Enter product ID to update >>> ");
-                int id = int.Parse(Console.ReadLine() ?? "0");
-                Console.Write("Enter new product quantity >>> ");
-                int quantity = int.Parse(Console.ReadLine() ?? "0");
+                ReadItems(inventoryMode: true, ref inventoryProducts, ref cartProducts);
+                Console.WriteLine();
+                ReadItems(inventoryMode: false, ref inventoryProducts, ref cartProducts);
+                int id = GetValidInteger("Enter product ID to update >>> ");
+                int quantity = GetValidInteger("Enter new product quantity >>> ");
 
                 Product? targetCartProduct = cartProducts.FirstOrDefault(p => p?.Id == id);
                 Product? targetInventoryProduct = inventoryProducts.FirstOrDefault(p => p?.Id == id);
@@ -217,21 +210,69 @@ namespace MyApp
         {
             if (inventoryMode)
             {
-                Console.Write("Enter product ID to delete from inventory >>> ");
-                int id = int.Parse(Console.ReadLine() ?? "0");
+                ReadItems(inventoryMode: true, ref inventoryProducts, ref cartProducts);
+                int id = GetValidInteger("Enter product ID to delete from inventory >>> ");
                 var product = ProductServiceProxy.Current.InventoryProducts.FirstOrDefault(p => p?.Id == id);
                 if (product != null)
                 {
                     ProductServiceProxy.Current.InventoryProducts.Remove(product);
                 }
+                else
+                {
+                    Console.WriteLine("Product not found in inventory.");
+                }
             }
             else
             {
-                Console.Write("Enter product ID to remove from cart >>> ");
-                int id = int.Parse(Console.ReadLine() ?? "0");
+                ReadItems(inventoryMode: false, ref inventoryProducts, ref cartProducts);
+                int id = GetValidInteger("Enter product ID to remove from cart >>>");
                 var product = ProductServiceProxy.Current.CartProducts.FirstOrDefault(p => p?.Id == id);
-                ProductServiceProxy.Current.RemoveFromCart(id, product.Quantity);
+                if (product != null)
+                {
+                    ProductServiceProxy.Current.RemoveFromCart(id, product.Quantity);
+                }
+                else
+                {
+                    Console.WriteLine("Product with id: " + id + " not found in cart.");
+                }
             }
+        }
+
+        static int GetValidInteger(string prompt)
+        {
+            int result;
+            while (true)
+            {
+                Console.Write(prompt);
+                if (int.TryParse(Console.ReadLine(), out result) && result > 0)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid integer.");
+                }
+            }
+            return result;
+        }
+
+        static string GetValidString(string prompt)
+        {
+            string? result;
+            while (true)
+            {
+                Console.Write(prompt);
+                result = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a non-empty name.");
+                }
+            }
+            return result;
         }
     }
 }

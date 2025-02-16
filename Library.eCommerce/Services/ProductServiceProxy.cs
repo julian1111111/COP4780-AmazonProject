@@ -22,6 +22,7 @@ namespace Library.eCommerce.Services
             var existingProduct = InventoryProducts.FirstOrDefault(p => p?.Id == product.Id);
             if (existingProduct == null)
             {
+                Console.WriteLine("Adding new product to inventory");
                 product.Id = ++LastKey;
                 InventoryProducts.Add(product);
             }
@@ -36,22 +37,33 @@ namespace Library.eCommerce.Services
 
         public void AddToCart(int productId, int quantity)
         {
-            var inventoryProduct = InventoryProducts.FirstOrDefault(p => p?.Id == productId);
-            if (inventoryProduct == null || inventoryProduct.Quantity < quantity)
+            try
             {
-                throw new InvalidOperationException("Not enough inventory.");
-            }
+                var inventoryProduct = InventoryProducts.FirstOrDefault(p => p?.Id == productId);
+                if (inventoryProduct == null)
+                {
+                    throw new InvalidOperationException("Product not found in inventory");
+                }
+                else if (inventoryProduct.Quantity < quantity)
+                {
+                    throw new InvalidOperationException("Not enough inventory");
+                }
 
-            inventoryProduct.Quantity -= quantity;
+                inventoryProduct.Quantity -= quantity;
 
-            var cartProduct = CartProducts.FirstOrDefault(p => p?.Id == productId);
-            if (cartProduct == null)
-            {
-                CartProducts.Add(new Product { Id = productId, Name = inventoryProduct.Name, Quantity = quantity });
+                var cartProduct = CartProducts.FirstOrDefault(p => p?.Id == productId);
+                if (cartProduct == null)
+                {
+                    CartProducts.Add(new Product { Id = productId, Name = inventoryProduct.Name, Quantity = quantity });
+                }
+                else
+                {
+                    cartProduct.Quantity += quantity;
+                }
             }
-            else
+            catch (InvalidOperationException ex)
             {
-                cartProduct.Quantity += quantity;
+                Console.WriteLine($"ERROR: {ex.Message}\n");
             }
         }
 
