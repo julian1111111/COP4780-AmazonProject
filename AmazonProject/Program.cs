@@ -48,6 +48,8 @@ namespace MyApp
                 modeChange = oldMode != inventoryMode ? true : false;
 
             } while (char.ToUpper(choice) != 'Q');
+
+            ProductServiceProxy.Current.Checkout();
         }
 
         static void printMenu(bool inventoryMode, bool modeChange)
@@ -62,6 +64,7 @@ namespace MyApp
                     Console.WriteLine("U: Update an inventory item");
                     Console.WriteLine("D: Delete an inventory item");
                     Console.WriteLine("M: Switch to shopping cart mode");
+                    Console.WriteLine("Q: Checkout");
                 }
                 Console.Write(">>> ");
             }
@@ -75,6 +78,7 @@ namespace MyApp
                     Console.WriteLine("U: Update number of items in shopping cart");
                     Console.WriteLine("D: Remove an item from shopping cart");
                     Console.WriteLine("M: Switch to inventory mode");
+                    Console.WriteLine("Q: Checkout");
                 }
                 Console.Write(">>> ");
             }
@@ -159,13 +163,13 @@ namespace MyApp
         {
             if (inventoryMode)
             {
-                Console.WriteLine("\tInventory\nID\tName\t\tQuantity\n--------------------------------");
+                Console.WriteLine("\tInventory\nID\tName\t\t\tQuantity\n--------------------------------");
                 inventoryProducts.ForEach(Console.WriteLine);
             }
 
             else
             {
-                Console.WriteLine("\tCart\nID\tName\t\tQuantity\n--------------------------------");
+                Console.WriteLine("\tCart\nID\tName\t\t\tQuantity\n--------------------------------");
                 cartProducts.ForEach(Console.WriteLine);
             }
         }
@@ -180,6 +184,8 @@ namespace MyApp
                 int quantity = GetValidInteger("Enter new product quantity >>> ");
 
                 ProductServiceProxy.Current.AddOrUpdateInventory(new Product { Id = id, Name = name, Quantity = quantity });
+                Console.WriteLine("Product updated in inventory");
+                ReadItems(inventoryMode: true, ref inventoryProducts, ref cartProducts);
             }
 
             else
@@ -196,13 +202,17 @@ namespace MyApp
                 // want less of item in cart 
                 if (quantity <= targetCartProduct?.Quantity)
                 {
-                    ProductServiceProxy.Current.RemoveFromCart(id, quantity);
+                    ProductServiceProxy.Current.RemoveFromCart(id, targetCartProduct.Quantity - quantity);
                 }
                 // want more of item in cart 
                 else
                 {
-                    ProductServiceProxy.Current.AddToCart(id, quantity);
+                    ProductServiceProxy.Current.AddToCart(id, quantity - targetCartProduct.Quantity);
                 }
+                Console.WriteLine("Product updated in cart and inventory");
+                ReadItems(inventoryMode: true, ref inventoryProducts, ref cartProducts);
+                Console.WriteLine();
+                ReadItems(inventoryMode: false, ref inventoryProducts, ref cartProducts);
             }
         }
 
@@ -216,10 +226,11 @@ namespace MyApp
                 if (product != null)
                 {
                     ProductServiceProxy.Current.InventoryProducts.Remove(product);
+                    Console.WriteLine("Product removed from inventory. Use 'R' to view inventory");
                 }
                 else
                 {
-                    Console.WriteLine("Product not found in inventory.");
+                    Console.WriteLine("ERROR: Product not found in inventory.");
                 }
             }
             else
@@ -230,10 +241,13 @@ namespace MyApp
                 if (product != null)
                 {
                     ProductServiceProxy.Current.RemoveFromCart(id, product.Quantity);
+                    Console.WriteLine("Product removed from cart");
+                    ReadItems(inventoryMode: true, ref inventoryProducts, ref cartProducts);
+                    ReadItems(inventoryMode: false, ref inventoryProducts, ref cartProducts);
                 }
                 else
                 {
-                    Console.WriteLine("Product with id: " + id + " not found in cart.");
+                    Console.WriteLine("ERROR: Product with id: " + id + " not found in cart.");
                 }
             }
         }
@@ -250,7 +264,7 @@ namespace MyApp
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input. Please enter a valid integer.");
+                    Console.WriteLine("ERROR: Invalid input. Please enter a valid integer.");
                 }
             }
             return result;
@@ -269,7 +283,7 @@ namespace MyApp
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input. Please enter a non-empty name.");
+                    Console.WriteLine("ERROR: Invalid input. Please enter a non-empty name.");
                 }
             }
             return result;

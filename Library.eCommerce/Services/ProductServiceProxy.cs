@@ -40,6 +40,7 @@ namespace Library.eCommerce.Services
             try
             {
                 var inventoryProduct = InventoryProducts.FirstOrDefault(p => p?.Id == productId);
+                var cartProduct = CartProducts.FirstOrDefault(p => p?.Id == productId);
                 if (inventoryProduct == null)
                 {
                     throw new InvalidOperationException("Product not found in inventory");
@@ -51,7 +52,6 @@ namespace Library.eCommerce.Services
 
                 inventoryProduct.Quantity -= quantity;
 
-                var cartProduct = CartProducts.FirstOrDefault(p => p?.Id == productId);
                 if (cartProduct == null)
                 {
                     CartProducts.Add(new Product { Id = productId, Name = inventoryProduct.Name, Quantity = quantity });
@@ -59,6 +59,11 @@ namespace Library.eCommerce.Services
                 else
                 {
                     cartProduct.Quantity += quantity;
+                }
+
+                if (inventoryProduct.Quantity == 0)
+                {
+                    InventoryProducts.Remove(inventoryProduct);
                 }
             }
             catch (InvalidOperationException ex)
@@ -69,22 +74,29 @@ namespace Library.eCommerce.Services
 
         public void RemoveFromCart(int productId, int quantity)
         {
-            var cartProduct = CartProducts.FirstOrDefault(p => p?.Id == productId);
-            if (cartProduct == null || cartProduct.Quantity < quantity)
+            try
             {
-                throw new InvalidOperationException("Not enough items in the cart.");
-            }
+                var cartProduct = CartProducts.FirstOrDefault(p => p?.Id == productId);
+                if (cartProduct == null || cartProduct.Quantity < quantity)
+                {
+                    throw new InvalidOperationException("Not enough items in the cart.");
+                }
 
-            cartProduct.Quantity -= quantity;
-            if (cartProduct.Quantity == 0)
-            {
-                CartProducts.Remove(cartProduct);
-            }
+                cartProduct.Quantity -= quantity;
+                if (cartProduct.Quantity == 0)
+                {
+                    CartProducts.Remove(cartProduct);
+                }
 
-            var inventoryProduct = InventoryProducts.FirstOrDefault(p => p?.Id == productId);
-            if (inventoryProduct != null)
+                var inventoryProduct = InventoryProducts.FirstOrDefault(p => p?.Id == productId);
+                if (inventoryProduct != null)
+                {
+                    inventoryProduct.Quantity += quantity;
+                }
+            }
+            catch (InvalidOperationException ex)
             {
-                inventoryProduct.Quantity += quantity;
+                Console.WriteLine($"ERROR: {ex.Message}\n");
             }
         }
 
