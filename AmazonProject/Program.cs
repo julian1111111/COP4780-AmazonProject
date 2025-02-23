@@ -13,6 +13,7 @@ namespace MyApp
             int lastId = 1;
             bool inventoryMode = true;
             bool modeChange = true;
+            char choice;
 
             Console.WriteLine("Welcome to Amazon!");
 
@@ -23,24 +24,36 @@ namespace MyApp
             List<Product?> inventoryProducts = ProductServiceProxy.Current.InventoryProducts;
             List<Product?> cartProducts = ProductServiceProxy.Current.CartProducts;
 
-            string? input = Console.ReadLine();
-            char choice = input[0];
+            do
+            {
+                string? input = Console.ReadLine();
+                if (!string.IsNullOrEmpty(input))
+                {
+                    choice = input[0];
+                    if (char.ToUpper(choice) == 'I' || char.ToUpper(choice) == 'S')
+                    {
+                        break;
+                    }
+                }
+                Console.WriteLine("Invalid input. Use 'I' or 'S' to select mode");
+                Console.Write(">>> ");
+            } while (true);
 
             inventoryMode = char.ToUpper(choice) == 'I' ? true :
                             char.ToUpper(choice) == 'S' ? false :
                             inventoryMode;
-
-            if (char.ToUpper(choice) != 'I' && char.ToUpper(choice) != 'S')
-            {
-                Console.WriteLine("Invalid input");
-            }
 
             do
             {
                 bool oldMode = inventoryMode;
                 printMenu(inventoryMode, modeChange);
 
-                input = Console.ReadLine();
+                string? input = Console.ReadLine();
+                if (string.IsNullOrEmpty(input))
+                {
+                    Console.WriteLine("Invalid input");
+                    continue;
+                }
                 choice = input[0];
 
                 inventoryMode = inventoryMode ? inventoryOperations(choice, ref inventoryProducts, ref lastId)
