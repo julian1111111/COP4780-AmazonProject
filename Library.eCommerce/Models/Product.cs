@@ -8,9 +8,11 @@ namespace AmazonProject.Models
 {
     public class Product
     {
+        // Product properties
         public int Id { get; set; }
         public string? Name { get; set; }
         public int Quantity { get; set; }
+        // Display property to format product information
         public string? Display
         {
             get
@@ -26,6 +28,7 @@ namespace AmazonProject.Models
             Quantity = 1;
         }
 
+        // Override ToString method to return Display property
         public override string ToString()
         {
             return Display ?? string.Empty;
