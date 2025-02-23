@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,24 @@ namespace Library.eCommerce.Services
 {
     public class ProductServiceProxy
     {
-        private static ProductServiceProxy? _current;
-        public static ProductServiceProxy Current => _current ??= new ProductServiceProxy();
+        private ProductServiceProxy() { }
+        private static ProductServiceProxy? instance;
+        private static object instanceLock = new object();
+        //public static ProductServiceProxy Current => _current ??= new ProductServiceProxy();
+        public static ProductServiceProxy Current
+        {
+            get
+            {
+                lock(instanceLock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new ProductServiceProxy();
+                    }
+                }
+                return instance;
+            }
+        }
 
         public List<Product?> InventoryProducts { get; } = new List<Product?>();
         public List<Product?> CartProducts { get; } = new List<Product?>();
