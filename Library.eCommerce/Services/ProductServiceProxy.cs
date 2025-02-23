@@ -110,6 +110,10 @@ namespace Library.eCommerce.Services
                 {
                     inventoryProduct.Quantity += quantity;
                 }
+                else
+                {
+                    InventoryProducts.Add(new Product { Id = productId, Name = cartProduct.Name, Quantity = quantity });
+                }
             }
             catch (InvalidOperationException ex)
             {
