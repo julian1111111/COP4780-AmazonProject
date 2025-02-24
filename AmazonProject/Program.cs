@@ -267,12 +267,7 @@ namespace MyApp
                 Product? targetCartProduct = cartProducts.FirstOrDefault(p => p?.Id == id);
                 Product? targetInventoryProduct = inventoryProducts.FirstOrDefault(p => p?.Id == id);
 
-                if (targetInventoryProduct == null)
-                {
-                    Console.WriteLine("ERROR: Product with id: " + id + " not found in inventory.");
-                    return;
-                }
-                else if (targetCartProduct == null)
+                if (targetCartProduct == null)
                 {
                     Console.WriteLine("ERROR: Product with id: " + id + " not found in cart.");
                     return;

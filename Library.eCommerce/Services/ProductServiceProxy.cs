@@ -32,9 +32,9 @@ namespace Library.eCommerce.Services
         }
 
         // Separate inventory and cart product lists.
-        // Should be private...
-        public List<Product?> InventoryProducts { get; } = new List<Product?>();
-        public List<Product?> CartProducts { get; } = new List<Product?>();
+        // Should be private...?
+        public List<Product?> InventoryProducts { get; private set; } = new List<Product?>();
+        public List<Product?> CartProducts { get; private set; } = new List<Product?>();
 
         // Last key used for product ID
         public int LastKey { get; private set; }
