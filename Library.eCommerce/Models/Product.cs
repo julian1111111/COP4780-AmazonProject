@@ -12,12 +12,14 @@ namespace AmazonProject.Models
         public int Id { get; set; }
         public string? Name { get; set; }
         public int Quantity { get; set; }
+        public double Price { get; set; }
+
         // Display property to format product information
         public string? Display
         {
             get
             {
-                return $"{Id}\t{Name}\t\t\t{Quantity}";
+                return $"{Id}\t{Name}\t\t\t{Quantity}\t\t{Price}";
             }
         }
 
@@ -26,6 +28,7 @@ namespace AmazonProject.Models
             Id = -1;
             Name = string.Empty;
             Quantity = 1;
+            Price = 0.0;
         }
 
         // Override ToString method to return Display property

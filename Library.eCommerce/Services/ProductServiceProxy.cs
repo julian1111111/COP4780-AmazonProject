@@ -55,6 +55,7 @@ namespace Library.eCommerce.Services
             {
                 existingProduct.Name = product.Name;
                 existingProduct.Quantity = product.Quantity;
+                existingProduct.Price = product.Price;
             }
 
             return product;
@@ -85,7 +86,7 @@ namespace Library.eCommerce.Services
                 // If product is not in cart, add it to cart
                 if (cartProduct == null)
                 {
-                    CartProducts.Add(new Product { Id = productId, Name = inventoryProduct.Name, Quantity = quantity });
+                    CartProducts.Add(new Product { Id = productId, Name = inventoryProduct.Name, Quantity = quantity, Price = inventoryProduct.Price });
                 }
                 // If product is already in cart, add quantity to it
                 else
@@ -135,7 +136,7 @@ namespace Library.eCommerce.Services
                 // Create new inventory item if it doesn't already exist 
                 else
                 {
-                    InventoryProducts.Add(new Product { Id = productId, Name = cartProduct.Name, Quantity = quantity });
+                    InventoryProducts.Add(new Product { Id = productId, Name = cartProduct.Name, Quantity = quantity, Price = cartProduct.Price });
                 }
             }
             // Print error messages
@@ -149,15 +150,15 @@ namespace Library.eCommerce.Services
         public void Checkout()
         {
             const double salesTax = 0.07;
-            double total = CartProducts.Sum(p => p?.Quantity * 10 ?? 0); // Assuming each product costs 10 units
+            double total = CartProducts.Sum(p => p?.Quantity * p?.Price ?? 0); // Assuming each product costs 10 units
             double totalWithTax = total * (1 + salesTax);
 
-            Console.WriteLine("Receipt:");
+            Console.WriteLine("\t\t\tReceipt\n\nProduct Name\t\tQuantity\t\tPrice");
             foreach (var product in CartProducts)
             {
-                Console.WriteLine($"{product?.Name}: {product?.Quantity}");
+                Console.WriteLine($"{product?.Name}\t\t\t{product?.Quantity}\t\t\t{(product?.Price * product?.Quantity):C}");
             }
-            Console.WriteLine($"Total: {totalWithTax:C}");
+            Console.WriteLine($"7% Sales Tax\t\t\t\t\t{(totalWithTax - total):C}\n\n\t\t\t\t\tTotal:\t{totalWithTax:C}");
         }
     }
 }
