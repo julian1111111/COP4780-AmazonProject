@@ -7,6 +7,15 @@
         public MainPage()
         {
             InitializeComponent();
+            BindingContext = this;
+        }
+
+        public string Display
+        {
+            get
+            {
+                return "Hello, world";
+            }
         }
 
         private void InventoryClicked(object sender, EventArgs e)

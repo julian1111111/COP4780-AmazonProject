@@ -5,6 +5,8 @@
 
     <ScrollView>
         <VerticalStackLayout>
+            <Label 
+                Text="{Binding Path=Display}"/>
             <Button
                 Text="Inventory Management"
                 Clicked="InventoryClicked"/>
