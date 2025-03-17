@@ -11,7 +11,16 @@ namespace Library.eCommerce.Services
     public class ProductServiceProxy
     {
         // Private constructor to prevent instantiation
-        private ProductServiceProxy() { }
+        private ProductServiceProxy() {
+            InventoryProducts = new List<Product?>
+            {
+                new Product { Id = 1, Name = "Mango", Quantity = 10, Price = 1.00 },
+                new Product { Id = 2, Name = "Banana", Quantity = 10, Price = 1.00 },
+                new Product { Id = 3, Name = "Orange", Quantity = 10, Price = 1.00 },
+            };
+
+            CartProducts = new List<Product?>();
+        }
 
         // Singleton pattern
         private static ProductServiceProxy? instance;
@@ -59,6 +68,32 @@ namespace Library.eCommerce.Services
             }
 
             return product;
+        }
+
+        // Delete product from inventory
+        public Product? DeleteFromInventory(int productId)
+        {
+            try
+            {
+                var product = InventoryProducts.FirstOrDefault(p => p?.Id == productId);
+
+                // If product is not found in inventory, throw an exception
+                if (product == null)
+                {
+                    throw new InvalidOperationException("Product not found in inventory");
+                }
+                else
+                {
+                    InventoryProducts.Remove(product);
+                }
+
+                return product;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"ERROR: {ex.Message}\n");
+                return null;
+            }
         }
 
         // Add a product to cart 
