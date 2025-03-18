@@ -5,10 +5,14 @@
              Title="InventoryProductDetail">
     <VerticalStackLayout>
         <Label 
-            Text="Inventory Product Details"
+            Text="Name:"
             VerticalOptions="Center" 
             HorizontalOptions="Center"/>
-
+        <Entry
+            Text="{Binding Name}"/>
+        <Button
+            Text="Ok"
+            Clicked="OkClicked"/>
         <Button
             Text="Go Back"
             Clicked="CancelClicked"/>
