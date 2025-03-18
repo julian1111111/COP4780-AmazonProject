@@ -11,10 +11,13 @@
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Route="MainPage"/>
     <ShellContent
         Title="Inventory"
         ContentTemplate="{DataTemplate views:InventoryManagementView}"
         Route="InventoryManagement"/>
-
+    <ShellContent
+        Title="Inventory"
+        ContentTemplate="{DataTemplate views:InventoryProductDetail}"
+        Route="InventoryProductDetail"/>
 </Shell>

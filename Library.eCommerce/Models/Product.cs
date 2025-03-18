@@ -26,7 +26,7 @@ namespace AmazonProject.Models
         public Product()
         {
             Id = -1;
-            Name = string.Empty;
+            Name = "Default";
             Quantity = 1;
             Price = 0.0;
         }

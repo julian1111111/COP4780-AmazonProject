@@ -36,6 +36,14 @@ namespace Maui.eCommerce.ViewModels
             }
         }
 
+        public Product? Add()
+        {
+            var newProduct = new Product();
+            var item = _svc.AddOrUpdateInventory(newProduct);
+            NotifyPropertyChanged("Products");
+            return item;
+        }
+
         public Product? Delete()
         {
             var item = _svc.DeleteFromInventory(SelectedProduct?.Id ?? 0);
