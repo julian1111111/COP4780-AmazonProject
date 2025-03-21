@@ -48,6 +48,11 @@ namespace Library.eCommerce.Services
         // Last key used for product ID
         public int LastKey { get; private set; }
 
+        public Product? GetById(int id)
+        {
+            return InventoryProducts.FirstOrDefault(p => p.Id == id);
+        }
+
         // Add or update inventory
         public Product AddOrUpdateInventory(Product product)
         {

@@ -19,6 +19,8 @@ public partial class InventoryManagementView : ContentPage
 
 	private void EditClicked(object sender, EventArgs e)
 	{
+		var productId = (BindingContext as InventoryManagementViewModel)?.SelectedProduct?.Id;
+		Shell.Current.GoToAsync($"//InventoryProductDetail?productId={productId}");
 	}
 
 	private void DeleteClicked(object sender, EventArgs e)
@@ -30,4 +32,9 @@ public partial class InventoryManagementView : ContentPage
 	{
 		Shell.Current.GoToAsync("//MainPage");
 	}
+
+    private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    {
+		(BindingContext as InventoryManagementViewModel)?.RefreshProductList();
+    }
 }

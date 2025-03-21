@@ -36,6 +36,11 @@ namespace Maui.eCommerce.ViewModels
             }
         }
 
+        public void RefreshProductList()
+        {
+            NotifyPropertyChanged(nameof(Products));
+        }
+
         public Product? Add()
         {
             var newProduct = new Product();
