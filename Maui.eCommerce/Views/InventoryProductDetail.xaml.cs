@@ -22,8 +22,9 @@ public partial class InventoryProductDetail : ContentPage
 
     private void OkClicked(object sender, EventArgs e)
     {
-        var name = (BindingContext as ProductViewModel).Name;
-        _svc.AddOrUpdateInventory(new Product { Name = name });
+        (BindingContext as ProductViewModel).AddOrUpdateInventory();
+        //var name = (BindingContext as ProductViewModel).Name;
+        //_svc.AddOrUpdateInventory(new Product { Name = name });
         Shell.Current.GoToAsync("//InventoryManagement");
     }
 

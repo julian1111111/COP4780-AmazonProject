@@ -1,4 +1,5 @@
 ﻿using AmazonProject.Models;
+using Library.eCommerce.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Maui.eCommerce.ViewModels
 {
     public class ProductViewModel
     {
+        ProductServiceProxy _svc = ProductServiceProxy.Current;
         public string? Name {
             get
             {
@@ -25,6 +27,11 @@ namespace Maui.eCommerce.ViewModels
         }
 
         public Product? Model { get; set; }
+
+        public void AddOrUpdateInventory()
+        {
+            _svc.AddOrUpdateInventory(Model);
+        }
 
         public ProductViewModel()
         {
