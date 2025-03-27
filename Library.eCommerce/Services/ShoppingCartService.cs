@@ -1,4 +1,5 @@
 ﻿using AmazonProject.Models;
+using Library.eCommerce.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,10 @@ namespace Library.eCommerce.Services
 {
     public class ShoppingCartService
     {
+        private ProductServiceProxy _prodSvc;
         private static ShoppingCartService? instance;
-        private List<Product> items;
-        public List<Product> CartItems
+        private List<Item> items;
+        public List<Item> CartItems
         {
             get
             {
@@ -32,7 +34,7 @@ namespace Library.eCommerce.Services
 
         private ShoppingCartService()
         {
-            items = new List<Product>();
+            items = new List<Item>();
         }
     }
 }

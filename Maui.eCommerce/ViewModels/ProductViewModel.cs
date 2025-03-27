@@ -27,6 +27,38 @@ namespace Maui.eCommerce.ViewModels
             }
         }
 
+        public int? Quantity
+        {
+            get
+            {
+                return Model?.Product?.Quantity ?? 0;
+            }
+
+            set
+            {
+                if (Model != null && Model.Product.Quantity != value)
+                {
+                    Model.Product.Quantity = value ?? 0;
+                }
+            }
+        }
+
+        public double? Price
+        {
+            get
+            {
+                return Model?.Product?.Price ?? 0.0;
+            }
+
+            set
+            {
+                if (Model != null && Model.Product.Price != value)
+                {
+                    Model.Product.Price = value ?? 0.0;
+                }
+            }
+        }
+
         public Item? Model { get; set; }
 
         public void AddOrUpdateInventory()

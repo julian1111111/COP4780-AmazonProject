@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Maui.eCommerce.Views.InventoryManagementView"
-             Title="InventoryManagementView"
+             x:Class="Maui.eCommerce.Views.ShopView"
+             Title="ShopView"
              NavigatedTo="ContentPage_NavigatedTo">
     <VerticalStackLayout>
-        <Label 
-            Text="Inventory Management"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label 
+                Text="Shop"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                Grid.Column="0"/>
+            <Button
+                Text="View Cart"
+                Grid.Column="1"
+                Clicked="ViewCartClicked"/>
+        </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10*"/>
@@ -19,32 +31,24 @@
         </Grid>
         <ListView
             ItemsSource="{Binding Products}"
-            SelectedItem="{Binding SelectedProduct}"
-            >
+            SelectedItem="{Binding SelectedProduct}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10*"/>
+                                <ColumnDefinition Width="8*"/>
+                                <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Text="{Binding Display}"/>
-                            <Button Grid.Column="1" Text="Edit"/>
+                            <Entry Grid.Column="1" Text="{Binding Quantity}" Keyboard="Numeric"/>
+                            <Button Grid.Column="2" Text="Add To Cart" Clicked="AddToCartClicked"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button
-            Text="Add"
-            Clicked="AddClicked"/>
-        <Button
-            Text="Edit"
-            Clicked="EditClicked"/>
-        <Button
-            Text="Delete"
-            Clicked="DeleteClicked"/>
         <Button
             Text="Go Back"
             Clicked="CancelClicked"/>

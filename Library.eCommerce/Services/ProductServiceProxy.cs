@@ -15,9 +15,9 @@ namespace Library.eCommerce.Services
         private ProductServiceProxy() {
             InventoryProducts = new List<Item?>
             {
-                new Item { Product = new Product{ Id = ++LastKey, Name = "Mango", Quantity = 10, Price = 1.00 }, Id = ++LastKey, Quantity = 1 },
-                new Item { Product = new Product{ Id = ++LastKey, Name = "Banana", Quantity = 10, Price = 1.00 }, Id = ++LastKey, Quantity = 1 },
-                new Item { Product = new Product{ Id = ++LastKey, Name = "Orange", Quantity = 10, Price = 1.00 }, Id = ++LastKey, Quantity = 1 },
+                new Item { Product = new Product{ Id = ++LastKey, Name = "Mango", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+                new Item { Product = new Product{ Id = ++LastKey, Name = "Banana", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+                new Item { Product = new Product{ Id = ++LastKey, Name = "Orange", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
             };
 
             CartProducts = new List<Item?>();
@@ -104,7 +104,7 @@ namespace Library.eCommerce.Services
         }
 
         // Add a product to cart 
-        public void AddToCart(int productId, int quantity)
+        public Item? AddToCart(int productId, int quantity)
         {
             // Prevent program from crashing if product is not found
             try
@@ -123,29 +123,31 @@ namespace Library.eCommerce.Services
                 }
 
                 // Remove appropriate quantity from given item in inventory
-                inventoryProduct.Quantity -= quantity;
+                inventoryProduct.Product.Quantity -= quantity;
 
                 // If product is not in cart, add it to cart
                 if (cartProduct == null)
                 {
-                    CartProducts.Add(new Item { Id = productId, Quantity = quantity, Product = new Product { Name = inventoryProduct.Product.Name, Price = inventoryProduct.Product.Price }});
+                    CartProducts.Add(new Item { Id = productId, Quantity = quantity, Product = new Product { Id = productId, Quantity = quantity, Name = inventoryProduct.Product.Name, Price = inventoryProduct.Product.Price }});
                 }
                 // If product is already in cart, add quantity to it
                 else
                 {
-                    cartProduct.Quantity += quantity;
+                    cartProduct.Product.Quantity += quantity;
                 }
 
                 // If user has added the last of an item to cart, remove it from inventory
-                if (inventoryProduct.Quantity == 0)
+                if (inventoryProduct.Product.Quantity == 0)
                 {
                     InventoryProducts.Remove(inventoryProduct);
                 }
+                return inventoryProduct;
             }
             // Print error messages 
             catch (InvalidOperationException ex)
             {
                 Console.WriteLine($"ERROR: {ex.Message}\n");
+                return new Item();
             }
         }
 

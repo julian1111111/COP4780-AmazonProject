@@ -1,5 +1,4 @@
-﻿using AmazonProject.Models;
-using Library.eCommerce.Models;
+﻿using Library.eCommerce.Models;
 using Library.eCommerce.Services;
 using System;
 using System.Collections.Generic;
@@ -12,11 +11,10 @@ using System.Threading.Tasks;
 
 namespace Maui.eCommerce.ViewModels
 {
-    public class InventoryManagementViewModel : INotifyPropertyChanged
+    public class ShopViewModel : INotifyPropertyChanged
     {
         public Item? SelectedProduct { get; set; }
         public string? Query { get; set; }
-        public int? AddQuantity { get; set; }
         private ProductServiceProxy _svc = ProductServiceProxy.Current;
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -44,27 +42,23 @@ namespace Maui.eCommerce.ViewModels
         {
             NotifyPropertyChanged(nameof(Products));
         }
-
-        public Item? Add()
+        public Item? Model { get; set; }
+        public ShopViewModel()
         {
-            var newProduct = new Item();
-            var item = _svc.AddOrUpdateInventory(newProduct);
+            Model = new Item();
+        }
+        public ShopViewModel(Item? model)
+        {
+            Model = model;
+        }
+        public void AddToCart(int productId, int quantity)
+        {
+            if (SelectedProduct != null)
+            {
+                _svc.AddToCart(productId, quantity);
+            }
             NotifyPropertyChanged("Products");
-            return item;
         }
 
-        public Item? Delete()
-        {
-            var item = _svc.DeleteFromInventory(SelectedProduct?.Id ?? 0);
-            NotifyPropertyChanged("Products");
-            return item;
-        }
-
-        //public Item? AddToCart()
-        //{
-        //    var item = _svc.AddToCart(SelectedProduct?.Id ?? 0, AddQuantity ?? 0);
-        //    NotifyPropertyChanged("Products");
-        //    return item;
-        //}
     }
 }

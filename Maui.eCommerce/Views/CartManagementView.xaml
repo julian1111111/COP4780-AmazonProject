@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Maui.eCommerce.Views.InventoryManagementView"
-             Title="InventoryManagementView"
+             x:Class="Maui.eCommerce.Views.CartManagementView"
+             Title="CartManagementView"
              NavigatedTo="ContentPage_NavigatedTo">
     <VerticalStackLayout>
         <Label 
-            Text="Inventory Management"
+            Text="Cart Management"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Button
+            Text="Go Back"
+            Clicked="CancelClicked"/>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10*"/>
@@ -19,8 +22,7 @@
         </Grid>
         <ListView
             ItemsSource="{Binding Products}"
-            SelectedItem="{Binding SelectedProduct}"
-            >
+            SelectedItem="{Binding SelectedProduct}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -36,17 +38,5 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button
-            Text="Add"
-            Clicked="AddClicked"/>
-        <Button
-            Text="Edit"
-            Clicked="EditClicked"/>
-        <Button
-            Text="Delete"
-            Clicked="DeleteClicked"/>
-        <Button
-            Text="Go Back"
-            Clicked="CancelClicked"/>
     </VerticalStackLayout>
 </ContentPage>
