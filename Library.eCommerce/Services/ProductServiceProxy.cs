@@ -29,6 +29,7 @@ namespace Library.eCommerce.Services
         // Singleton pattern
         private static ProductServiceProxy? instance;
         private static object instanceLock = new object();
+
         public static ProductServiceProxy Current
         {
             get

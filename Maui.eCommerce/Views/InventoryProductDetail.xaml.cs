@@ -15,6 +15,7 @@ public partial class InventoryProductDetail : ContentPage
 		InitializeComponent();
         BindingContext = new ProductViewModel();
 	}
+
     private void CancelClicked(object sender, EventArgs e)
     {
         Shell.Current.GoToAsync("//InventoryManagement");

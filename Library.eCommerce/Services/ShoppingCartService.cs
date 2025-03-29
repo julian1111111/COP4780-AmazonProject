@@ -13,13 +13,8 @@ namespace Library.eCommerce.Services
         private ProductServiceProxy _prodSvc;
         private static ShoppingCartService? instance;
         private List<Item> items;
-        public List<Item> CartItems
-        {
-            get
-            {
-                return items;
-            }
-        }
+        public List<Item> CartItems { get { return items; } }
+
         public static ShoppingCartService Current 
         { 
             get

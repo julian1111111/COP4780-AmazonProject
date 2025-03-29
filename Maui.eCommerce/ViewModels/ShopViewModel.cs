@@ -42,15 +42,19 @@ namespace Maui.eCommerce.ViewModels
         {
             NotifyPropertyChanged(nameof(Products));
         }
+
         public Item? Model { get; set; }
+
         public ShopViewModel()
         {
             Model = new Item();
         }
+
         public ShopViewModel(Item? model)
         {
             Model = model;
         }
+
         public void AddToCart(int productId, int quantity)
         {
             if (SelectedProduct != null)

@@ -18,6 +18,7 @@ namespace Maui.eCommerce.ViewModels
         private ProductServiceProxy _svc = ProductServiceProxy.Current;
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (propertyName is null)
@@ -41,6 +42,7 @@ namespace Maui.eCommerce.ViewModels
         {
             NotifyPropertyChanged(nameof(Products));
         }
+
         public void RemoveFromCart(int productId, int quantity)
         {
             if (SelectedProduct != null)

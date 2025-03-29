@@ -35,6 +35,7 @@ public partial class CartManagementView : ContentPage
             (BindingContext as CartManagementViewModel)?.RemoveFromCart(item.Id, item.Product.Quantity - item.Quantity);
         }
     }
+
     private void RemoveClicked(object sender, EventArgs e)
     {
         var button = (Button)sender;

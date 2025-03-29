@@ -12,11 +12,10 @@ namespace Maui.eCommerce.ViewModels
     public class ProductViewModel
     {
         ProductServiceProxy _svc = ProductServiceProxy.Current;
-        public string? Name {
-            get
-            {
-                return Model?.Product?.Name ?? string.Empty;
-            }
+
+        public string? Name 
+        {
+            get { return Model?.Product?.Name ?? string.Empty; }
 
             set
             {
@@ -28,11 +27,8 @@ namespace Maui.eCommerce.ViewModels
         }
 
         public int? Quantity
-        {
-            get
-            {
-                return Model?.Product?.Quantity ?? 0;
-            }
+        { 
+            get { return Model?.Product?.Quantity ?? 0; }
 
             set
             {
@@ -44,11 +40,8 @@ namespace Maui.eCommerce.ViewModels
         }
 
         public double? Price
-        {
-            get
-            {
-                return Model?.Product?.Price ?? 0.0;
-            }
+        { 
+            get { return Model?.Product?.Price ?? 0.0; }
 
             set
             {
@@ -61,11 +54,6 @@ namespace Maui.eCommerce.ViewModels
 
         public Item? Model { get; set; }
 
-        public void AddOrUpdateInventory()
-        {
-            _svc.AddOrUpdateInventory(Model);
-        }
-
         public ProductViewModel()
         {
             Model = new Item();
@@ -74,6 +62,11 @@ namespace Maui.eCommerce.ViewModels
         public ProductViewModel(Item? model)
         {
             Model = model;
+        }
+
+        public void AddOrUpdateInventory()
+        {
+            _svc.AddOrUpdateInventory(Model);
         }
     }
 }
