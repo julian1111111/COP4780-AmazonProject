@@ -1,4 +1,5 @@
 ﻿using AmazonProject.Models;
+using Library.eCommerce.Models;
 using Library.eCommerce.Services;
 using System;
 using System.Collections.Generic;
@@ -14,19 +15,51 @@ namespace Maui.eCommerce.ViewModels
         public string? Name {
             get
             {
-                return Model?.Name ?? string.Empty;
+                return Model?.Product?.Name ?? string.Empty;
             }
 
             set
             {
-                if (Model != null && Model.Name != value)
+                if (Model != null && Model.Product.Name != value)
                 {
-                    Model.Name = value;
+                    Model.Product.Name = value;
                 }
             }
         }
 
-        public Product? Model { get; set; }
+        public int? Quantity
+        {
+            get
+            {
+                return Model?.Product?.Quantity ?? 0;
+            }
+
+            set
+            {
+                if (Model != null && Model.Product.Quantity != value)
+                {
+                    Model.Product.Quantity = value ?? 0;
+                }
+            }
+        }
+
+        public double? Price
+        {
+            get
+            {
+                return Model?.Product?.Price ?? 0.0;
+            }
+
+            set
+            {
+                if (Model != null && Model.Product.Price != value)
+                {
+                    Model.Product.Price = value ?? 0.0;
+                }
+            }
+        }
+
+        public Item? Model { get; set; }
 
         public void AddOrUpdateInventory()
         {
@@ -35,10 +68,10 @@ namespace Maui.eCommerce.ViewModels
 
         public ProductViewModel()
         {
-            Model = new Product();
+            Model = new Item();
         }
 
-        public ProductViewModel(Product? model)
+        public ProductViewModel(Item? model)
         {
             Model = model;
         }

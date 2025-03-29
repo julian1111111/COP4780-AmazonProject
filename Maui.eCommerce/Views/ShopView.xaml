@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Maui.eCommerce.Views.ShopView"
+             Title="ShopView"
+             NavigatedTo="ContentPage_NavigatedTo">
+    <VerticalStackLayout>
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label 
+                Text="Shop"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                Grid.Column="0"/>
+            <Button
+                Text="View Cart"
+                Grid.Column="1"
+                Clicked="ViewCartClicked"/>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Entry Text="{Binding Query}" Grid.Column="0"/>
+            <Button Text="Search" Grid.Column="1" Clicked="SearchClicked"/>
+        </Grid>
+        <ListView
+            ItemsSource="{Binding Products}"
+            SelectedItem="{Binding SelectedProduct}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="{Binding sId}"/>
+                            <Label Grid.Column="1" Text="{Binding sName}"/>
+                            <Label Grid.Column="2" Text="{Binding sQuantity}"/>
+                            <Label Grid.Column="3" Text="{Binding sPrice}"/>
+                            <Entry Grid.Column="4" Text="{Binding Quantity}" Keyboard="Numeric"/>
+                            <Button Grid.Column="5" Text="Add To Cart" Clicked="AddToCartClicked"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button
+            Text="Go Back"
+            Clicked="CancelClicked"/>
+    </VerticalStackLayout>
+</ContentPage>

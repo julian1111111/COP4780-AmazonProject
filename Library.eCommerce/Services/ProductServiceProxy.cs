@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AmazonProject.Models;
+using Library.eCommerce.Models;
 
 namespace Library.eCommerce.Services
 {
@@ -12,14 +13,17 @@ namespace Library.eCommerce.Services
     {
         // Private constructor to prevent instantiation
         private ProductServiceProxy() {
-            InventoryProducts = new List<Product?>
+            InventoryProducts = new List<Item?>
             {
-                new Product { Id = ++LastKey, Name = "Mango", Quantity = 10, Price = 1.00 },
-                new Product { Id = ++LastKey, Name = "Banana", Quantity = 10, Price = 1.00 },
-                new Product { Id = ++LastKey, Name = "Orange", Quantity = 10, Price = 1.00 },
+                new Item { Product = new Product{ Id = ++LastKey, Name = "Mango", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+                new Item { Product = new Product{ Id = ++LastKey, Name = "Banana", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+                new Item { Product = new Product{ Id = ++LastKey, Name = "Orange", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
             };
 
-            CartProducts = new List<Product?>();
+            CartProducts = new List<Item?>
+            {
+                new Item { Product = new Product{ Id = ++LastKey, Name = "Pineapple", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+            };
         }
 
         // Singleton pattern
@@ -42,41 +46,42 @@ namespace Library.eCommerce.Services
 
         // Separate inventory and cart product lists.
         // Should be private...?
-        public List<Product?> InventoryProducts { get; private set; } = new List<Product?>();
-        public List<Product?> CartProducts { get; private set; } = new List<Product?>();
+        public List<Item?> InventoryProducts { get; private set; } = new List<Item?>();
+        public List<Item?> CartProducts { get; private set; } = new List<Item?>();
 
         // Last key used for product ID
         public int LastKey { get; private set; }
 
-        public Product? GetById(int id)
+        public Item? GetById(int id)
         {
             return InventoryProducts.FirstOrDefault(p => p.Id == id);
         }
 
         // Add or update inventory
-        public Product AddOrUpdateInventory(Product product)
+        public Item AddOrUpdateInventory(Item item)
         {
-            var existingProduct = InventoryProducts.FirstOrDefault(p => p?.Id == product.Id);
+            var existingProduct = InventoryProducts.FirstOrDefault(p => p?.Id == item.Id);
             // If product doesn't exist, add it to inventory
             if (existingProduct == null)
             {
                 Console.WriteLine("Adding new product to inventory");
-                product.Id = ++LastKey;
-                InventoryProducts.Add(product);
+                item.Id = ++LastKey;
+                item.Product.Id = item.Id;
+                InventoryProducts.Add(item);
             }
             // If product exists, update its name and quantity
             else
             {
-                existingProduct.Name = product.Name;
-                existingProduct.Quantity = product.Quantity;
-                existingProduct.Price = product.Price;
+                existingProduct.Product.Name = item.Product.Name;
+                existingProduct.Quantity = item.Quantity;
+                existingProduct.Product.Price = item.Product.Price;
             }
 
-            return product;
+            return item;
         }
 
         // Delete product from inventory
-        public Product? DeleteFromInventory(int productId)
+        public Item? DeleteFromInventory(int productId)
         {
             try
             {
@@ -102,7 +107,7 @@ namespace Library.eCommerce.Services
         }
 
         // Add a product to cart 
-        public void AddToCart(int productId, int quantity)
+        public Item? AddToCart(int productId, int quantity)
         {
             // Prevent program from crashing if product is not found
             try
@@ -115,35 +120,48 @@ namespace Library.eCommerce.Services
                     throw new InvalidOperationException("Product not found in inventory");
                 }
                 // If there is not enough inventory, throw an exception
-                else if (inventoryProduct.Quantity < quantity)
+                else if (inventoryProduct.Product.Quantity < quantity)
                 {
                     throw new InvalidOperationException("Not enough inventory");
                 }
 
                 // Remove appropriate quantity from given item in inventory
-                inventoryProduct.Quantity -= quantity;
+                inventoryProduct.Product.Quantity -= quantity;
 
                 // If product is not in cart, add it to cart
                 if (cartProduct == null)
                 {
-                    CartProducts.Add(new Product { Id = productId, Name = inventoryProduct.Name, Quantity = quantity, Price = inventoryProduct.Price });
+                    CartProducts.Add(new Item 
+                    { 
+                        Id = productId, 
+                        Quantity = quantity,
+                        Product = new Product 
+                        { 
+                            Id = productId, 
+                            Quantity = quantity, 
+                            Name = inventoryProduct.Product.Name, 
+                            Price = inventoryProduct.Product.Price 
+                        }
+                    });
                 }
                 // If product is already in cart, add quantity to it
                 else
                 {
-                    cartProduct.Quantity += quantity;
+                    cartProduct.Product.Quantity += quantity;
                 }
 
                 // If user has added the last of an item to cart, remove it from inventory
-                if (inventoryProduct.Quantity == 0)
+                if (inventoryProduct.Product.Quantity == 0)
                 {
                     InventoryProducts.Remove(inventoryProduct);
                 }
+                return inventoryProduct;
             }
             // Print error messages 
             catch (InvalidOperationException ex)
             {
                 Console.WriteLine($"ERROR: {ex.Message}\n");
+                return new Item();
             }
         }
 
@@ -155,14 +173,19 @@ namespace Library.eCommerce.Services
             {
                 var cartProduct = CartProducts.FirstOrDefault(p => p?.Id == productId);
                 // If product is not in cart or requested removal quantity is greater than cart quantity, throw an exception
-                if (cartProduct == null || cartProduct.Quantity < quantity)
+                if (cartProduct == null)
                 {
                     throw new InvalidOperationException("Not enough items in the cart.");
                 }
+                else if (quantity < 0)
+                {
+                    AddToCart(productId, -quantity);
+                    return;
+                }
 
                 // Remove quantity from cart product, remove the product from cart if quantity is now 0
-                cartProduct.Quantity -= quantity;
-                if (cartProduct.Quantity == 0)
+                cartProduct.Product.Quantity -= quantity;
+                if (cartProduct.Product.Quantity == 0)
                 {
                     CartProducts.Remove(cartProduct);
                 }
@@ -171,12 +194,23 @@ namespace Library.eCommerce.Services
                 var inventoryProduct = InventoryProducts.FirstOrDefault(p => p?.Id == productId);
                 if (inventoryProduct != null)
                 {
-                    inventoryProduct.Quantity += quantity;
+                    inventoryProduct.Product.Quantity += quantity;
                 }
                 // Create new inventory item if it doesn't already exist 
                 else
                 {
-                    InventoryProducts.Add(new Product { Id = productId, Name = cartProduct.Name, Quantity = quantity, Price = cartProduct.Price });
+                    InventoryProducts.Add(new Item
+                    {
+                        Id = productId,
+                        Quantity = quantity,
+                        Product = new Product
+                        {
+                            Id = productId,
+                            Quantity = quantity,
+                            Name = cartProduct.Product.Name,
+                            Price = cartProduct.Product.Price
+                        }
+                    });
                 }
             }
             // Print error messages
@@ -190,13 +224,13 @@ namespace Library.eCommerce.Services
         public void Checkout()
         {
             const double salesTax = 0.07;
-            double total = CartProducts.Sum(p => p?.Quantity * p?.Price ?? 0); // Assuming each product costs 10 units
+            double total = CartProducts.Sum(p => p?.Quantity * p?.Product?.Price ?? 0); // Assuming each product costs 10 units
             double totalWithTax = total * (1 + salesTax);
 
             Console.WriteLine("\t\t\tReceipt\n\nProduct Name\t\tQuantity\t\tPrice");
             foreach (var product in CartProducts)
             {
-                Console.WriteLine($"{product?.Name}\t\t\t{product?.Quantity}\t\t\t{(product?.Price * product?.Quantity):C}");
+                Console.WriteLine($"{product?.Product?.Name}\t\t\t{product?.Quantity}\t\t\t{(product?.Product?.Price * product?.Quantity):C}");
             }
             Console.WriteLine($"7% Sales Tax\t\t\t\t\t{(totalWithTax - total):C}\n\n\t\t\t\t\tTotal:\t{totalWithTax:C}");
         }

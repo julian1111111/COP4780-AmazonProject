@@ -1,5 +1,4 @@
-﻿using AmazonProject.Models;
-using Library.eCommerce.Models;
+﻿using Library.eCommerce.Models;
 using Library.eCommerce.Services;
 using System;
 using System.Collections.Generic;
@@ -12,15 +11,13 @@ using System.Threading.Tasks;
 
 namespace Maui.eCommerce.ViewModels
 {
-    public class InventoryManagementViewModel : INotifyPropertyChanged
+    public class CartManagementViewModel : INotifyPropertyChanged
     {
         public Item? SelectedProduct { get; set; }
         public string? Query { get; set; }
-        public int? AddQuantity { get; set; }
         private ProductServiceProxy _svc = ProductServiceProxy.Current;
 
         public event PropertyChangedEventHandler? PropertyChanged;
-
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (propertyName is null)
@@ -35,7 +32,7 @@ namespace Maui.eCommerce.ViewModels
         {
             get
             {
-                var filteredList = _svc.InventoryProducts.Where(p => p?.Product?.Name?.ToLower().Contains(Query?.ToLower() ?? string.Empty) ?? false);
+                var filteredList = _svc.CartProducts.Where(p => p?.Product?.Name?.ToLower().Contains(Query?.ToLower() ?? string.Empty) ?? false);
                 return new ObservableCollection<Item?>(filteredList);
             }
         }
@@ -44,20 +41,13 @@ namespace Maui.eCommerce.ViewModels
         {
             NotifyPropertyChanged(nameof(Products));
         }
-
-        public Item? Add()
+        public void RemoveFromCart(int productId, int quantity)
         {
-            var newProduct = new Item();
-            var item = _svc.AddOrUpdateInventory(newProduct);
+            if (SelectedProduct != null)
+            {
+                _svc.RemoveFromCart(productId, quantity);
+            }
             NotifyPropertyChanged("Products");
-            return item;
-        }
-
-        public Item? Delete()
-        {
-            var item = _svc.DeleteFromInventory(SelectedProduct?.Id ?? 0);
-            NotifyPropertyChanged("Products");
-            return item;
         }
     }
 }
