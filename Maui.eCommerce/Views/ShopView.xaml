@@ -37,13 +37,19 @@
                     <ViewCell>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="8*"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="5*"/>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Text="{Binding Display}"/>
-                            <Entry Grid.Column="1" Text="{Binding Quantity}" Keyboard="Numeric"/>
-                            <Button Grid.Column="2" Text="Add To Cart" Clicked="AddToCartClicked"/>
+                            <Label Grid.Column="0" Text="{Binding sId}"/>
+                            <Label Grid.Column="1" Text="{Binding sName}"/>
+                            <Label Grid.Column="2" Text="{Binding sQuantity}"/>
+                            <Label Grid.Column="3" Text="{Binding sPrice}"/>
+                            <Entry Grid.Column="4" Text="{Binding Quantity}" Keyboard="Numeric"/>
+                            <Button Grid.Column="5" Text="Add To Cart" Clicked="AddToCartClicked"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

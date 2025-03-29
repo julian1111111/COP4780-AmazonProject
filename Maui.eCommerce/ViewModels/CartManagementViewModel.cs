@@ -41,5 +41,13 @@ namespace Maui.eCommerce.ViewModels
         {
             NotifyPropertyChanged(nameof(Products));
         }
+        public void RemoveFromCart(int productId, int quantity)
+        {
+            if (SelectedProduct != null)
+            {
+                _svc.RemoveFromCart(productId, quantity);
+            }
+            NotifyPropertyChanged("Products");
+        }
     }
 }

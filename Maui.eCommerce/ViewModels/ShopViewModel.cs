@@ -59,6 +59,5 @@ namespace Maui.eCommerce.ViewModels
             }
             NotifyPropertyChanged("Products");
         }
-
     }
 }

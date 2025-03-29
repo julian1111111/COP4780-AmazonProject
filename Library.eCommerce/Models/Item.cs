@@ -23,5 +23,34 @@ namespace Library.eCommerce.Models
         {
             Product = new Product();
         }
+
+        public string sId
+        {
+            get
+            {
+                return $"{Id}";
+            }
+        }
+        public string sName
+        {
+            get
+            {
+                return $"{Product.Name}";
+            }
+        }
+        public string sQuantity
+        {
+            get
+            {
+                return $"{Product.Quantity}";
+            }
+        }
+        public string sPrice
+        {
+            get
+            {
+                return $"${Product.Price}";
+            }
+        }
     }
 }

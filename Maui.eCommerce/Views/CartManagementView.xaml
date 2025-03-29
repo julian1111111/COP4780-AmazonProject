@@ -9,9 +9,6 @@
             Text="Cart Management"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Button
-            Text="Go Back"
-            Clicked="CancelClicked"/>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10*"/>
@@ -28,15 +25,28 @@
                     <ViewCell>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10*"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Text="{Binding Display}"/>
-                            <Button Grid.Column="1" Text="Edit"/>
+                            <Label Grid.Column="0" Text="{Binding sId}"/>
+                            <Label Grid.Column="1" Text="{Binding sName}"/>
+                            <Label Grid.Column="2" Text="{Binding sQuantity}"/>
+                            <Label Grid.Column="3" Text="{Binding sPrice}"/>
+                            <Entry Grid.Column="4" Text="{Binding Quantity}" Keyboard="Numeric"/>
+                            <Button Grid.Column="5" Text="Edit" Clicked="EditClicked"/>
+                            <Button Grid.Column="6" Text="Remove" Clicked="RemoveClicked"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Button
+            Text="Go Back"
+            Clicked="CancelClicked"/>
     </VerticalStackLayout>
 </ContentPage>

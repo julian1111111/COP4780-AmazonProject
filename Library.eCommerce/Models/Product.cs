@@ -19,7 +19,7 @@ namespace AmazonProject.Models
         {
             get
             {
-                return $"{Id}\t{Name}\t\t\t{Quantity}\t\t${Price}";
+                return string.Format("{0,-10} {1, -30} {2, -10} {3, -10}", Id, Name, Quantity, Price.ToString("C"));
             }
         }
 

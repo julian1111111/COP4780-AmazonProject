@@ -59,12 +59,5 @@ namespace Maui.eCommerce.ViewModels
             NotifyPropertyChanged("Products");
             return item;
         }
-
-        //public Item? AddToCart()
-        //{
-        //    var item = _svc.AddToCart(SelectedProduct?.Id ?? 0, AddQuantity ?? 0);
-        //    NotifyPropertyChanged("Products");
-        //    return item;
-        //}
     }
 }
