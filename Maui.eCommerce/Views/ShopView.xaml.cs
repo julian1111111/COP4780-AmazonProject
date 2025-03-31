@@ -31,6 +31,11 @@ public partial class ShopView : ContentPage
         Shell.Current.GoToAsync("//CartManagement");
     }
 
+    private void CheckoutClicked(object sender, EventArgs e)
+    {
+        Shell.Current.GoToAsync("//Checkout");
+    }
+
     private void CancelClicked(object sender, EventArgs e)
     {
         Shell.Current.GoToAsync("//MainPage");

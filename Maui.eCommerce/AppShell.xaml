@@ -28,4 +28,12 @@
         Title="Cart"
         ContentTemplate="{DataTemplate views:CartManagementView}"
         Route="CartManagement"/>
+    <ShellContent
+        Title="Checkout"
+        ContentTemplate="{DataTemplate views:CheckoutView}"
+        Route="Checkout"/>
+    <ShellContent
+        Title="Receipt"
+        ContentTemplate="{DataTemplate views:Receipt}"
+        Route="Receipt"/>
 </Shell>

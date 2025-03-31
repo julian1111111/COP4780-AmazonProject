@@ -45,4 +45,9 @@ public partial class CartManagementView : ContentPage
             (BindingContext as CartManagementViewModel)?.RemoveFromCart(item.Id, item.Product.Quantity);
         }
     }
+
+    private void CheckoutClicked(object sender, EventArgs e)
+    {
+        Shell.Current.GoToAsync("//Checkout");
+    }
 }

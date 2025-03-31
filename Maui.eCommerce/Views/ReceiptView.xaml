@@ -1,47 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Maui.eCommerce.Views.CartManagementView"
-             Title="CartManagementView"
+             x:Class="Maui.eCommerce.Views.Receipt"
+             Title="Receipt"
              NavigatedTo="ContentPage_NavigatedTo">
     <VerticalStackLayout>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Label 
-                Text="Cart Management"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center"
-                Grid.Column="0"/>
-            <Button Text="Shop" Grid.Column="1" Clicked="CancelClicked"/>
-        </Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Entry Text="{Binding Query}" Grid.Column="0"/>
-            <Button Text="Search" Grid.Column="1" Clicked="SearchClicked"/>
-        </Grid>
+        <Label 
+            Text="Order Summary"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="5*"/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Text="ID"/>
             <Label Grid.Column="1" Text="Name"/>
             <Label Grid.Column="2" Text="Price"/>
-            <Label Grid.Column="3" Text="In Cart"/>
+            <Label Grid.Column="3" Text="Quantity"/>
         </Grid>
         <ListView
-            ItemsSource="{Binding Products}"
-            SelectedItem="{Binding SelectedProduct}">
+            ItemsSource="{Binding Products}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -52,23 +33,41 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="4*"/>
                                 <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Text="{Binding sId}"/>
                             <Label Grid.Column="1" Text="{Binding sName}"/>
                             <Label Grid.Column="2" Text="{Binding sPrice}"/>
                             <Label Grid.Column="3" Text="{Binding sQuantity}"/>
-                            <Entry Grid.Column="4" Text="{Binding Quantity}" Keyboard="Numeric"/>
-                            <Button Grid.Column="5" Text="Edit" Clicked="EditClicked"/>
-                            <Button Grid.Column="6" Text="Remove" Clicked="RemoveClicked"/>
+                            <Label Grid.Column="4" Text="{Binding lineItemPrice}"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="3" Text="Sales Tax:"/>
+                <Label Grid.Column="4" Text="{Binding Tax}"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="3" Text="Order Subtotal:"/>
+                <Label Grid.Column="4" Text="{Binding Total}"/>
+            </Grid>
         <Button
-            Text="{Binding Total}"
-            Clicked="CheckoutClicked"/>
+            Text="Continue Shopping"
+            Clicked="CancelClicked"/>
     </VerticalStackLayout>
 </ContentPage>

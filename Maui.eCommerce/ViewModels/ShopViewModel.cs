@@ -41,6 +41,7 @@ namespace Maui.eCommerce.ViewModels
         public void RefreshProductList()
         {
             NotifyPropertyChanged(nameof(Products));
+            NotifyPropertyChanged(nameof(Total));
         }
 
         public Item? Model { get; set; }
@@ -55,6 +56,15 @@ namespace Maui.eCommerce.ViewModels
             Model = model;
         }
 
+        public string? Total
+        {
+            get
+            {
+                double total = _svc.CartProducts.Sum(p => p.Product.Price * p.Product.Quantity) * 1.07;
+                return $"Checkout: {total.ToString("C2")}";
+            }
+        }
+
         public void AddToCart(int productId, int quantity)
         {
             if (SelectedProduct != null)
@@ -62,6 +72,7 @@ namespace Maui.eCommerce.ViewModels
                 _svc.AddToCart(productId, quantity);
             }
             NotifyPropertyChanged("Products");
+            NotifyPropertyChanged("Total");
         }
     }
 }

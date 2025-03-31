@@ -221,6 +221,11 @@ namespace Library.eCommerce.Services
             }
         }
 
+        public void ClearCart()
+        {
+            CartProducts.Clear();
+        }
+
         // Checkout function to print receipt
         public void Checkout()
         {

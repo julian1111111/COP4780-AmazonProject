@@ -11,12 +11,9 @@ using System.Threading.Tasks;
 
 namespace Maui.eCommerce.ViewModels
 {
-    public class CartManagementViewModel : INotifyPropertyChanged
+    public class ReceiptViewModel
     {
-        public Item? SelectedProduct { get; set; }
-        public string? Query { get; set; }
-        private ProductServiceProxy _svc = ProductServiceProxy.Current;
-
+        ProductServiceProxy _svc = ProductServiceProxy.Current;
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -33,8 +30,7 @@ namespace Maui.eCommerce.ViewModels
         {
             get
             {
-                var filteredList = _svc.CartProducts.Where(p => p?.Product?.Name?.ToLower().Contains(Query?.ToLower() ?? string.Empty) ?? false);
-                return new ObservableCollection<Item?>(filteredList);
+                return new ObservableCollection<Item?>(_svc.CartProducts);
             }
         }
 
@@ -42,25 +38,43 @@ namespace Maui.eCommerce.ViewModels
         {
             NotifyPropertyChanged(nameof(Products));
             NotifyPropertyChanged(nameof(Total));
+            NotifyPropertyChanged(nameof(Tax));
+        }
+
+        public Item? Model { get; set; }
+
+        public ReceiptViewModel()
+        {
+            Model = new Item();
+        }
+
+        public ReceiptViewModel(Item? model)
+        {
+            Model = model;
+        }
+
+        public string? Tax
+        {
+            get
+            {
+                
+                double tax = _svc.CartProducts.Sum(p => p.Product.Price * p.Product.Quantity) * 0.07;
+                return $"{tax.ToString("C2")}";
+            }
         }
 
         public string? Total
         {
-            get
+            get 
             {
                 double total = _svc.CartProducts.Sum(p => p.Product.Price * p.Product.Quantity) * 1.07;
-                return $"Checkout: {total.ToString("C2")}";
+                return $"{total.ToString("C2")}"; 
             }
         }
 
-        public void RemoveFromCart(int productId, int quantity)
+        public void ClearCart()
         {
-            if (SelectedProduct != null)
-            {
-                _svc.RemoveFromCart(productId, quantity);
-            }
-            NotifyPropertyChanged("Products");
-            NotifyPropertyChanged("Total");
+            _svc.ClearCart();
         }
     }
 }

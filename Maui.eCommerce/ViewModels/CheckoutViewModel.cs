@@ -11,12 +11,9 @@ using System.Threading.Tasks;
 
 namespace Maui.eCommerce.ViewModels
 {
-    public class CartManagementViewModel : INotifyPropertyChanged
+    public class CheckoutViewModel : INotifyPropertyChanged
     {
-        public Item? SelectedProduct { get; set; }
-        public string? Query { get; set; }
         private ProductServiceProxy _svc = ProductServiceProxy.Current;
-
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -33,34 +30,49 @@ namespace Maui.eCommerce.ViewModels
         {
             get
             {
-                var filteredList = _svc.CartProducts.Where(p => p?.Product?.Name?.ToLower().Contains(Query?.ToLower() ?? string.Empty) ?? false);
-                return new ObservableCollection<Item?>(filteredList);
+                //var filteredList = _svc.CartProducts.Where(p => p?.Product?.Name?.ToLower().Contains(Query?.ToLower() ?? string.Empty) ?? false);
+                return new ObservableCollection<Item?>(_svc.CartProducts);
             }
         }
 
         public void RefreshProductList()
         {
             NotifyPropertyChanged(nameof(Products));
-            NotifyPropertyChanged(nameof(Total));
+            NotifyPropertyChanged(nameof(OrderPrice));
         }
 
-        public string? Total
+        public Item? Model { get; set; }
+
+        public CheckoutViewModel()
+        {
+            Model = new Item();
+        }
+
+        public CheckoutViewModel(Item? model)
+        {
+            Model = model;
+        }
+
+        public double? Total
         {
             get
             {
-                double total = _svc.CartProducts.Sum(p => p.Product.Price * p.Product.Quantity) * 1.07;
-                return $"Checkout: {total.ToString("C2")}";
+                return _svc.CartProducts.Sum(p => p.Product.Price * p.Product.Quantity) * 1.07;
             }
         }
 
-        public void RemoveFromCart(int productId, int quantity)
+        public string? OrderPrice
         {
-            if (SelectedProduct != null)
+            get
             {
-                _svc.RemoveFromCart(productId, quantity);
+                return $"Complete Order: {Total?.ToString("C2")}";
             }
+        }
+
+        public void ClearCart()
+        {
+            _svc.ClearCart();
             NotifyPropertyChanged("Products");
-            NotifyPropertyChanged("Total");
         }
     }
 }

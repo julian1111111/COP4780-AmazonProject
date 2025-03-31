@@ -22,5 +22,6 @@ namespace Library.eCommerce.Models
         public string sName { get { return $"{Product.Name}"; } }
         public string sQuantity { get { return $"{Product.Quantity}"; } }
         public string sPrice { get { return $"${Product.Price}"; } }
+        public string lineItemPrice { get { return (Product.Price * Product.Quantity).ToString("C2"); } }
     }
 }
