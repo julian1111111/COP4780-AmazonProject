@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AmazonProject.Models;
+using Library.eCommerce.DTO;
 using Library.eCommerce.Models;
 
 namespace Library.eCommerce.Services
@@ -15,14 +16,14 @@ namespace Library.eCommerce.Services
         private ProductServiceProxy() {
             InventoryProducts = new List<Item?>
             {
-                new Item { Product = new Product{ Id = ++LastKey, Name = "Mango", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
-                new Item { Product = new Product{ Id = ++LastKey, Name = "Banana", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
-                new Item { Product = new Product{ Id = ++LastKey, Name = "Orange", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+                new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Mango", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+                new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Banana", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+                new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Orange", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
             };
 
             CartProducts = new List<Item?>
             {
-                new Item { Product = new Product{ Id = ++LastKey, Name = "Pineapple", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+                new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Pineapple", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
             };
         }
 
@@ -136,7 +137,7 @@ namespace Library.eCommerce.Services
                     { 
                         Id = productId, 
                         Quantity = quantity,
-                        Product = new Product 
+                        Product = new ProductDTO 
                         { 
                             Id = productId, 
                             Quantity = quantity, 
@@ -204,7 +205,7 @@ namespace Library.eCommerce.Services
                     {
                         Id = productId,
                         Quantity = quantity,
-                        Product = new Product
+                        Product = new ProductDTO
                         {
                             Id = productId,
                             Quantity = quantity,

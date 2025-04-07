@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Library.eCommerce.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,14 @@ namespace AmazonProject.Models
         }
 
         public Product(Product p)
+        {
+            Name = p.Name;
+            Id = p.Id;
+            Quantity = p.Quantity;
+            Price = p.Price;
+        }
+
+        public Product(ProductDTO p)
         {
             Name = p.Name;
             Id = p.Id;

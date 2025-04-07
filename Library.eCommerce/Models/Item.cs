@@ -1,4 +1,5 @@
 ﻿using AmazonProject.Models;
+using Library.eCommerce.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +12,17 @@ namespace Library.eCommerce.Models
     {
         public Item()
         {
-            Product = new Product();
+            Product = new ProductDTO();
         }
 
         public Item(Item i)
         {
-            Product = new Product(i.Product);
+            Product = new ProductDTO(i.Product);
             Quantity = i.Quantity;
             Id = i.Id;
         }
 
-        public Product Product {  get; set; }
+        public ProductDTO Product {  get; set; }
         public int Id { get; set; }
         public int Quantity { get; set; }
         public string Display { get { return Product?.Display ?? string.Empty; } }
