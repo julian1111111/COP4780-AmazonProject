@@ -14,6 +14,13 @@ namespace Library.eCommerce.Models
             Product = new Product();
         }
 
+        public Item(Item i)
+        {
+            Product = new Product(i.Product);
+            Quantity = i.Quantity;
+            Id = i.Id;
+        }
+
         public Product Product {  get; set; }
         public int Id { get; set; }
         public int Quantity { get; set; }

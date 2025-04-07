@@ -31,6 +31,14 @@ namespace AmazonProject.Models
             Price = 0.0;
         }
 
+        public Product(Product p)
+        {
+            Name = p.Name;
+            Id = p.Id;
+            Quantity = p.Quantity;
+            Price = p.Price;
+        }
+
         // Override ToString method to return Display property
         public override string ToString()
         {

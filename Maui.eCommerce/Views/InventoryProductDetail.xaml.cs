@@ -18,6 +18,7 @@ public partial class InventoryProductDetail : ContentPage
 
     private void CancelClicked(object sender, EventArgs e)
     {
+        (BindingContext as ProductViewModel).Undo();
         Shell.Current.GoToAsync("//InventoryManagement");
     }
 
