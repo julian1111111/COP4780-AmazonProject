@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using AmazonProject.Models;
 using Library.eCommerce.DTO;
 using Library.eCommerce.Models;
+using Library.eCommerce.Utilities;
+using Newtonsoft.Json;
 
 namespace Library.eCommerce.Services
 {
@@ -14,12 +16,14 @@ namespace Library.eCommerce.Services
     {
         // Private constructor to prevent instantiation
         private ProductServiceProxy() {
-            InventoryProducts = new List<Item?>
-            {
-                new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Mango", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
-                new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Banana", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
-                new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Orange", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
-            };
+            var productPayload = new WebRequestHandler().Get("/Inventory").Result;
+            InventoryProducts = JsonConvert.DeserializeObject<List<Item>>(productPayload) ?? new List<Item?>();
+            //InventoryProducts = new List<Item?>
+            //{
+            //    new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Mango", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+            //    new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Banana", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+            //    new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Orange", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+            //};
 
             CartProducts = new List<Item?>
             {
@@ -75,7 +79,7 @@ namespace Library.eCommerce.Services
             else
             {
                 existingProduct.Product.Name = item.Product.Name;
-                existingProduct.Quantity = item.Quantity;
+                existingProduct.Product.Quantity = item.Product.Quantity;
                 existingProduct.Product.Price = item.Product.Price;
             }
 

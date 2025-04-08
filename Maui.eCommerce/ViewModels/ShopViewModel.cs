@@ -13,7 +13,7 @@ namespace Maui.eCommerce.ViewModels
 {
     public class ShopViewModel : INotifyPropertyChanged
     {
-        public Item? SelectedProduct { get; set; }
+        public ItemViewModel? SelectedProduct { get; set; }
         public string? Query { get; set; }
         private ProductServiceProxy _svc = ProductServiceProxy.Current;
 
@@ -29,12 +29,15 @@ namespace Maui.eCommerce.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ObservableCollection<Item?> Products
+        public ObservableCollection<ItemViewModel?> Products
         {
             get
             {
-                var filteredList = _svc.InventoryProducts.Where(p => p?.Product?.Name?.ToLower().Contains(Query?.ToLower() ?? string.Empty) ?? false);
-                return new ObservableCollection<Item?>(filteredList);
+                var filteredList = _svc.InventoryProducts
+                    .Where(p => p?.Product?.Name?.ToLower()
+                    .Contains(Query?.ToLower() ?? string.Empty) ?? false)
+                    .Select(m => new ItemViewModel(m));
+                return new ObservableCollection<ItemViewModel?>(filteredList);
             }
         }
 
@@ -44,14 +47,14 @@ namespace Maui.eCommerce.ViewModels
             NotifyPropertyChanged(nameof(Total));
         }
 
-        public Item? Model { get; set; }
+        public ItemViewModel? Model { get; set; }
 
         public ShopViewModel()
         {
-            Model = new Item();
+            Model = new ItemViewModel();
         }
 
-        public ShopViewModel(Item? model)
+        public ShopViewModel(ItemViewModel? model)
         {
             Model = model;
         }

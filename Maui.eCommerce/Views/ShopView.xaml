@@ -58,11 +58,11 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Text="{Binding sId}"/>
-                            <Label Grid.Column="1" Text="{Binding sName}"/>
-                            <Label Grid.Column="2" Text="{Binding sPrice}"/>
-                            <Label Grid.Column="3" Text="{Binding sQuantity}"/>
-                            <Entry Grid.Column="4" Text="{Binding Quantity}" Keyboard="Numeric"/>
+                            <Label Grid.Column="0" Text="{Binding Model.sId}"/>
+                            <Label Grid.Column="1" Text="{Binding Model.sName}"/>
+                            <Label Grid.Column="2" Text="{Binding Model.sPrice}"/>
+                            <Label Grid.Column="3" Text="{Binding Model.sQuantity}"/>
+                            <Entry Grid.Column="4" Text="{Binding Model.Quantity}" Keyboard="Numeric"/>
                             <Button Grid.Column="5" Text="Add To Cart" Clicked="AddToCartClicked" Command="{Binding AddCommand}"/>
                         </Grid>
                     </ViewCell>

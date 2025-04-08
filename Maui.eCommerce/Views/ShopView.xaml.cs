@@ -19,10 +19,10 @@ public partial class ShopView : ContentPage
     private void AddToCartClicked(object sender, EventArgs e)
     {
         var button = (Button)sender;
-        var item = button.BindingContext as Item;
+        var item = button.BindingContext as ItemViewModel;
         if (item != null)
         {
-            (BindingContext as ShopViewModel)?.AddToCart(item.Id, item.Quantity);
+            (BindingContext as ShopViewModel)?.AddToCart(item.Model.Id, item.Model.Quantity);
         }
     }
 
