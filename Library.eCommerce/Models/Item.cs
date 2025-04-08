@@ -1,10 +1,13 @@
 ﻿using AmazonProject.Models;
 using Library.eCommerce.DTO;
+using Library.eCommerce.Services;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Library.eCommerce.Models
 {
@@ -13,6 +16,8 @@ namespace Library.eCommerce.Models
         public Item()
         {
             Product = new ProductDTO();
+
+            //AddCommand = new Command(DoAdd);
         }
 
         public Item(Item i)
@@ -20,8 +25,16 @@ namespace Library.eCommerce.Models
             Product = new ProductDTO(i.Product);
             Quantity = i.Quantity;
             Id = i.Id;
+
+            //AddCommand = new Command(DoAdd);
         }
 
+        private void DoAdd()
+        {
+            ProductServiceProxy.Current.AddOrUpdateInventory(this);
+        }
+
+        //public ICommand? AddCommand { get; set; }
         public ProductDTO Product {  get; set; }
         public int Id { get; set; }
         public int Quantity { get; set; }

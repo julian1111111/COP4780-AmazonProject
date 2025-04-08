@@ -63,7 +63,7 @@
                             <Label Grid.Column="2" Text="{Binding sPrice}"/>
                             <Label Grid.Column="3" Text="{Binding sQuantity}"/>
                             <Entry Grid.Column="4" Text="{Binding Quantity}" Keyboard="Numeric"/>
-                            <Button Grid.Column="5" Text="Add To Cart" Clicked="AddToCartClicked"/>
+                            <Button Grid.Column="5" Text="Add To Cart" Clicked="AddToCartClicked" Command="{Binding AddCommand}"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
