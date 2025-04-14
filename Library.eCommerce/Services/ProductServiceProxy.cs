@@ -100,10 +100,10 @@ namespace Library.eCommerce.Services
                 }
                 else
                 {
+                    var result = new WebRequestHandler().Delete($"/Inventory/{productId}").Result;
                     InventoryProducts.Remove(product);
+                    return JsonConvert.DeserializeObject<Item>(result);
                 }
-
-                return product;
             }
             catch (InvalidOperationException ex)
             {

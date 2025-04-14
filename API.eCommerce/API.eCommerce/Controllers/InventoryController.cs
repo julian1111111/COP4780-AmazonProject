@@ -1,3 +1,4 @@
+using API.eCommerce.EC;
 using Library.eCommerce.DTO;
 using Library.eCommerce.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -20,12 +21,19 @@ namespace API.eCommerce.Controllers
         [HttpGet]
         public IEnumerable<Item?> Get()
         {
-            return new List<Item?>
-            {
-                new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Mango WEB", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
-                new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Banana WEB", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
-                new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Orange WEB", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
-            };
+            return new InventoryEC().Get();
+        }
+
+        [HttpGet("{id}")]
+        public Item? GetById(int id)
+        {
+            return new InventoryEC().Get().FirstOrDefault(i => i?.Id == id);
+        }
+
+        [HttpDelete("{id}")]
+        public Item? Delete(int id)
+        {
+            return new InventoryEC().Delete(id);
         }
     }
 }

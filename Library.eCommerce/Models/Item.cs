@@ -28,7 +28,6 @@ namespace Library.eCommerce.Models
         public ProductDTO Product {  get; set; }
         public int Id { get; set; }
         public int Quantity { get; set; }
-        public string Display { get { return Product?.Display ?? string.Empty; } }
         public string sId { get { return $"{Id}"; } }
         public string sName { get { return $"{Product.Name}"; } }
         public string sQuantity { get { return $"{Product.Quantity}"; } }

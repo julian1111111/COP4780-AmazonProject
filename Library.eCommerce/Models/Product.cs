@@ -15,14 +15,6 @@ namespace AmazonProject.Models
         public int Quantity { get; set; }
         public double Price { get; set; }
 
-        // Display property to format product information
-        public string? Display
-        {
-            get
-            {
-                return string.Format("{0,-10} {1, -30} {2, -10} {3, -10}", Id, Name, Quantity, Price.ToString("C"));
-            }
-        }
 
         public Product()
         {
@@ -46,12 +38,6 @@ namespace AmazonProject.Models
             Id = p.Id;
             Quantity = p.Quantity;
             Price = p.Price;
-        }
-
-        // Override ToString method to return Display property
-        public override string ToString()
-        {
-            return Display ?? string.Empty;
         }
     }
 }
