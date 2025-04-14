@@ -6,7 +6,6 @@ namespace API.eCommerce.EC
 {
     public class InventoryEC
     {
-        public int LastKey { get; private set; }
 
 
         public List<Item?> Get()
@@ -23,6 +22,23 @@ namespace API.eCommerce.EC
             }
 
             return itemToDelete;
+        }
+
+        public Item? AddOrUpdateInventory(Item item)
+        {
+            if (item.Id == 0) {
+                item.Id = FakeDatabase.LastKeyItem + 1;
+                item.Product.Id = item.Id;
+                FakeDatabase.Inventory.Add(item);
+            }
+            else
+            {
+                var existingItem = FakeDatabase.Inventory.FirstOrDefault(p => p?.Id == item.Id);
+                existingItem.Product.Name = item.Product.Name;
+                existingItem.Product.Quantity = item.Product.Quantity;
+                existingItem.Product.Price = item.Product.Price;
+            }
+            return item;
         }
     }
 }

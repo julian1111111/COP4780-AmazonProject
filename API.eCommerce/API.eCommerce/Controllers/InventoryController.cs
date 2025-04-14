@@ -35,5 +35,12 @@ namespace API.eCommerce.Controllers
         {
             return new InventoryEC().Delete(id);
         }
+
+        [HttpPost]
+        public Item? AddOrUpdateInventory([FromBody]Item item)
+        {
+            var newItem = new InventoryEC().AddOrUpdateInventory(item);
+            return item;
+        }
     }
 }

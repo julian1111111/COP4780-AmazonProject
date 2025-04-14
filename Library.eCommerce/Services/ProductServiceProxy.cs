@@ -27,7 +27,7 @@ namespace Library.eCommerce.Services
 
             CartProducts = new List<Item?>
             {
-                new Item { Product = new ProductDTO{ Id = ++LastKey, Name = "Pineapple", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+                new Item { Product = new ProductDTO{ Id = LastKey, Name = "Pineapple", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
             };
         }
 
@@ -56,7 +56,18 @@ namespace Library.eCommerce.Services
         public List<Item?> CartProducts { get; private set; } = new List<Item?>();
 
         // Last key used for product ID
-        public int LastKey { get; private set; }
+        public int LastKey
+        {
+            get
+            {
+                if (!InventoryProducts.Any())
+                {
+                    return 0;
+                }
+
+                return InventoryProducts.Select(p => p?.Id ?? 0).Max();
+            }
+        }
 
         public Item? GetById(int id)
         {
@@ -66,14 +77,19 @@ namespace Library.eCommerce.Services
         // Add or update inventory
         public Item AddOrUpdateInventory(Item item)
         {
+            var response = new WebRequestHandler().Post("/Inventory", item).Result;
+            var newItem = JsonConvert.DeserializeObject<Item>(response);
             var existingProduct = InventoryProducts.FirstOrDefault(p => p?.Id == item.Id);
+            if (newItem == null)
+            {
+                return item;
+            }
             // If product doesn't exist, add it to inventory
             if (existingProduct == null)
             {
-                Console.WriteLine("Adding new product to inventory");
-                item.Id = ++LastKey;
-                item.Product.Id = item.Id;
-                InventoryProducts.Add(item);
+                //item.Id = LastKey + 1;
+                //item.Product.Id = item.Id;
+                InventoryProducts.Add(newItem);
             }
             // If product exists, update its name and quantity
             else
