@@ -37,6 +37,7 @@ namespace Maui.eCommerce.ViewModels
 
         public void RefreshProductList()
         {
+            NotifyPropertyChanged(nameof(Tax));
             NotifyPropertyChanged(nameof(Products));
             NotifyPropertyChanged(nameof(OrderPrice));
         }
@@ -53,11 +54,27 @@ namespace Maui.eCommerce.ViewModels
             Model = model;
         }
 
+        public string? Tax
+        {
+            get
+            {
+                
+                //double tax = _svc.CartProducts.Sum(p => p.Product.Price * p.Product.Quantity) * 0.07;
+                var rate = AppSettings.SalesTaxRate;
+                double tax = _svc.CartProducts
+                    .Sum(p => p.Product.Price * p.Product.Quantity * (rate));
+                return $"{tax.ToString("C2")}";
+            }
+        }
+
         public double? Total
         {
             get
             {
-                return _svc.CartProducts.Sum(p => p.Product.Price * p.Product.Quantity) * 1.07;
+                var rate = AppSettings.SalesTaxRate;
+                double total = _svc.CartProducts
+                    .Sum(p => p.Product.Price * p.Product.Quantity * (1 + rate));
+                return total;
             }
         }
 

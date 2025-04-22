@@ -44,6 +44,17 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="3" Text="Sales Tax:"/>
+            <Label Grid.Column="4" Text="{Binding Tax}"/>
+        </Grid>
         <Button
             Text="{Binding OrderPrice}"
             Clicked="CompletePurchaseClicked"/>

@@ -48,7 +48,10 @@ namespace Maui.eCommerce.ViewModels
         {
             get
             {
-                double total = _svc.CartProducts.Sum(p => p.Product.Price * p.Product.Quantity) * 1.07;
+                //double total = _svc.CartProducts.Sum(p => p.Product.Price * p.Product.Quantity) * 1.07;
+                var rate = AppSettings.SalesTaxRate;
+                double total = _svc.CartProducts
+                    .Sum(p => p.Product.Price * p.Product.Quantity * (1 + rate));
                 return $"Checkout: {total.ToString("C2")}";
             }
         }
