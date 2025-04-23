@@ -37,11 +37,49 @@ namespace Maui.eCommerce.ViewModels
                 return new ObservableCollection<Item?>(filteredList);
             }
         }
+        public ObservableCollection<string> SortOptions { get; }
+
+        string _selectedSortOption;
+        public string SelectedSortOption
+        {
+            get
+            {
+                return _selectedSortOption;
+            }
+            set
+            {
+                if (_selectedSortOption == value) return;
+                _selectedSortOption = value;
+                ApplySorting();
+            }
+        }
+
+        void ApplySorting()
+        {
+            var buffer = SelectedSortOption.ToLower() switch
+            {
+                "id" => _svc.CartProducts.OrderBy(p => p.Product.Id).ToList(),
+                "name" => _svc.CartProducts.OrderBy(p => p.Product.Name).ToList(),
+                "price: low to high" => _svc.CartProducts.OrderBy(p => p.Product.Price).ToList(),
+                "price: high to low" => _svc.CartProducts.OrderByDescending(p => p.Product.Price).ToList(),
+                _ => _svc.CartProducts.ToList()
+            };
+            _svc.CartProducts.Clear();
+            foreach (var itm in buffer)
+                _svc.CartProducts.Add(itm);
+            RefreshProductList();
+        }
 
         public void RefreshProductList()
         {
             NotifyPropertyChanged(nameof(Products));
             NotifyPropertyChanged(nameof(Total));
+        }
+
+        public CartManagementViewModel()
+        {
+            SortOptions = new ObservableCollection<string> { "ID", "Name", "Price: Low to High", "Price: High to Low" };
+            SelectedSortOption = SortOptions[0];
         }
 
         public string? Total

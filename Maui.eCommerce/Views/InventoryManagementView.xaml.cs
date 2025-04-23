@@ -35,6 +35,7 @@ public partial class InventoryManagementView : ContentPage
 
     private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
+		(BindingContext as InventoryManagementViewModel)?.ApplySorting();
 		(BindingContext as InventoryManagementViewModel)?.RefreshProductList();
     }
 

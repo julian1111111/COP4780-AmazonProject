@@ -30,6 +30,12 @@
             <Label Grid.Column="1" Text="Name"/>
             <Label Grid.Column="2" Text="Price"/>
             <Label Grid.Column="3" Text="Available"/>
+            <Picker
+                Title="Sort By"
+                ItemsSource="{Binding SortOptions}"
+                SelectedItem="{Binding SelectedSortOption, Mode=TwoWay}"
+                Grid.Column="4"
+                Grid.ColumnSpan="2"/>
         </Grid>
         <ListView
             ItemsSource="{Binding Products}"

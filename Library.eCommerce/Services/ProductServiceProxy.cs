@@ -15,8 +15,8 @@ namespace Library.eCommerce.Services
         private ProductServiceProxy() {
             InventoryProducts = new List<Item?>
             {
-                new Item { Product = new Product{ Id = ++LastKey, Name = "Mango", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
-                new Item { Product = new Product{ Id = ++LastKey, Name = "Banana", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
+                new Item { Product = new Product{ Id = ++LastKey, Name = "Mango", Quantity = 10, Price = 3.00 }, Id = LastKey, Quantity = 1 },
+                new Item { Product = new Product{ Id = ++LastKey, Name = "Banana", Quantity = 10, Price = 2.00 }, Id = LastKey, Quantity = 1 },
                 new Item { Product = new Product{ Id = ++LastKey, Name = "Orange", Quantity = 10, Price = 1.00 }, Id = LastKey, Quantity = 1 },
             };
 
