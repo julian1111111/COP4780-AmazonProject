@@ -21,12 +21,26 @@ namespace Maui.eCommerce.ViewModels
             {
                 return _salesTax;
             }
-            set
+            private set
             {
                 if (_salesTax == value) return;
                 _salesTax = value;
                 AppSettings.SalesTaxRate = value;
                 Notify();
+            }
+        }
+
+        public void OnSalesTaxCompleted(object sender)
+        {
+            var entry = (Entry)sender;
+            if (double.TryParse(entry.Text, out var val))
+            {
+                SalesTax = val;
+                entry.Text = val.ToString("F2");
+            }
+            else
+            {
+                entry.Text = SalesTax.ToString("F2");
             }
         }
         public string Display

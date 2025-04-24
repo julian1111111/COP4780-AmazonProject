@@ -13,9 +13,11 @@
                 Clicked="ShopClicked"/>
             <Label Text="Sales tax rate"/>
             <Entry
-                Text="{Binding SalesTax, Mode=TwoWay, StringFormat='{}{0:F2}'}"
+                Text="{Binding SalesTax, Mode=TwoWay}"
                 Keyboard="Numeric"
-                Placeholder="0.07"/>
+                Placeholder="0.07"
+                Completed="OnSalesTaxCompleted"
+                Unfocused="OnSalesTaxCompleted"/>
         </VerticalStackLayout>
     </ScrollView>
 

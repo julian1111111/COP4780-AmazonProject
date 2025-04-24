@@ -21,6 +21,11 @@ namespace Maui.eCommerce
         {
             Shell.Current.GoToAsync("//Shop");
         }
+
+        private void OnSalesTaxCompleted(object sender, EventArgs e)
+        {
+            (BindingContext as MainViewModel)?.OnSalesTaxCompleted(sender);
+        }
     }
 
 }
