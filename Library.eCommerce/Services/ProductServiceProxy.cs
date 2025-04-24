@@ -125,9 +125,13 @@ namespace Library.eCommerce.Services
                 {
                     throw new InvalidOperationException("Not enough inventory");
                 }
+                else if (quantity < 0)
+                {
+                    throw new InvalidOperationException("Invalid quantity");
+                }
 
-                // Remove appropriate quantity from given item in inventory
-                inventoryProduct.Product.Quantity -= quantity;
+                    // Remove appropriate quantity from given item in inventory
+                    inventoryProduct.Product.Quantity -= quantity;
 
                 // If product is not in cart, add it to cart
                 if (cartProduct == null)
